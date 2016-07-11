@@ -6,10 +6,12 @@ Install Homebrew:
 http://brew.sh
 
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-Install Node.js:
+Install Node.js via brew:
 https://nodejs.org/en/download/package-manager/#osx
 
     brew install node
+Or install Node.js via it's package. Which is easier.    
+    
 Next we'll add express to our directory.
 https://expressjs.com/en/starter/installing.html
 
@@ -24,3 +26,6 @@ Follow the steps in the terminal...
 And finish with installing express in the directory:
 
     npm install express --save
+Install Socket.io
+
+    npm install socket.io
