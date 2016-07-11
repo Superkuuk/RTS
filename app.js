@@ -27,6 +27,11 @@ io.on('connection', function (socket) {
 	socket.on('disconnect', function(){
 		console.log('User disconnected');
 	});
+
+  socket.on('draggable move', function(position){
+    socket.broadcast.emit('draggable move', position);
+  });
+
 });
 
 server.listen(8080, function(){
