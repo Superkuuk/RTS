@@ -29,7 +29,12 @@ io.on('connection', function (socket) {
 	});
 
   socket.on('draggable move', function(position){
-    socket.broadcast.emit('draggable move', position);
+    socket.broadcast.emit('draggable move return', position);
+  });
+
+  socket.on('chat message', function(msg){
+  	console.log(msg);
+    io.emit('chat message return', msg);
   });
 
 });
