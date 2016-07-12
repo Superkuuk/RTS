@@ -50,11 +50,19 @@
 	position: fixed;
 	top: 30px;
 	bottom: 180px;
-	width: 400px;
 	overflow: hidden;
+	z-index: 999;
+	pointer-events: none;
 }
 
 #chatList p {
-	z-index: 999;
 	margin: 0 0 0 20px;
+	max-width: 40%;
+	opacity: 0.80;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;   /* Chrome/Safari/Opera */
+	-moz-user-select: none;      /* Firefox */
+	-ms-user-select: none;       /* Internet Explorer/Edge */
+	user-select: none;           /* Non-prefixed version, currently
+								  not supported by any browser */
 }
