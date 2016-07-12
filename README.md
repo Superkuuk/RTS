@@ -20,7 +20,10 @@ Make a new directory for the app:
 Then start installing express into the new directory:
 
     npm init
-Follow the steps in the terminal...
+Follow the steps in the terminal, name the app 'app.js'
 And finish with installing express in the directory:
 
     npm install express --save
+You can now run the server with:
+
+    node app.js
