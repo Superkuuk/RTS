@@ -3,7 +3,3 @@ body {
 	margin: 0;
 	padding: 0;
 }
-
-.ui-draggable {
-	z-index: 800;
-}
