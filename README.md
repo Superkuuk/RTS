@@ -1,6 +1,7 @@
 # RTS
 Real Time Strategy Development. A project to make a strategy game, which is played in real-time. With multiplayer support and an advanced AI computer oppent.
 
+<<<<<<< HEAD
 # Install for OS X
 Install Homebrew:
 http://brew.sh
@@ -27,3 +28,6 @@ And finish with installing express in the directory:
 You can now run the server with:
 
     node app.js
+=======
+Take a look at the wiki on how to set up a server for running the game.
+>>>>>>> master
