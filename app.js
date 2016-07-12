@@ -32,8 +32,8 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('draggable move return', position);
   });
 
+	// TODO add [player] before message.
   socket.on('chat message', function(msg){
-  	console.log(msg);
     io.emit('chat message return', msg);
   });
 
