@@ -5,3 +5,74 @@ body {
 	-o-background-size: cover;
 	background-size: cover;
 }
+
+#loginForm {
+	position: absolute;
+	right: 80px;
+	top: 50px;
+	width: 300px;
+	background-color: #37322E;
+	color: white;
+	text-align: center;
+	padding: 20px 20px 30px 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+input {
+	width: 80%;
+	font-size: 17px;
+    border: none;
+    border-bottom: 1px solid #775B27;
+    background-color: #37322E;
+    font-family: 'Architects Daughter', cursive;
+    color: white;
+    margin-bottom: 20px;
+    
+    -webkit-transition: border-bottom 0.2s ease-in-out;
+    transition: border-bottom 0.2s ease-in-out;
+}
+
+input:focus {
+	outline: none;
+	border-bottom: 1px solid #F5AE2A;
+}
+
+input[type=submit] {
+	cursor: pointer;
+	border: 1px solid #775B27;
+    width: 35%;
+    float: left;
+    margin-left: 10%;
+    background-color: #443E39;
+    font-variant: small-caps;
+    font-size: 15px;
+    padding: 5px 0;
+    margin-top: 20px;
+    
+    -webkit-transition: border 0.2s ease-in-out;
+    transition: border 0.2s ease-in-out;
+}
+
+input[type=submit]:hover {
+	 border: 1px solid #F5AE2A;
+}
+
+hr {
+    height: 30px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 0 0 0;
+    border-radius: 20px;
+    margin-top: 30px;
+}
+
+hr:before { /* Not really supposed to work, but does */
+    display: block;
+    content: "";
+    height: 30px;
+    margin-top: -31px;
+    border-style: solid;
+    border-color: black;
+    border-width: 0 0 1px 0;
+    border-radius: 20px;
+}

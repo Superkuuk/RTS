@@ -3,9 +3,15 @@ console.log('Starting game server...');
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+// =========================== Authentication Setup ===========================
 
 
-// Main directory
+
+// =========================== Routing ===========================
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/main/index.html');
 });
@@ -20,11 +26,12 @@ app.get('/lobby', function (req, res) {
   res.sendFile(__dirname + '/lobby/index.html');
 });
 
-
 	//This handler will listen for requests on /*, any file from the root of our server.
 	//See expressjs documentation for more info on routing.
 
 app.get( '/*' , function( req, res, next ) {
+
+	// TODO add file security. Limit sending files to only the files that are needed.
 
 	//This is the current file they have requested
 	var file = req.params[0];
@@ -32,8 +39,13 @@ app.get( '/*' , function( req, res, next ) {
 	res.sendFile( __dirname + '/' + file );
 
 });
-    
-// Various functions:
+
+
+// =========================== Authentication ===========================
+
+  
+
+// =========================== Functions ===========================
 io.on('connection', function (socket) {
 	console.log('A user connected');
 	
@@ -52,6 +64,8 @@ io.on('connection', function (socket) {
 
 });
 
+
+// =========================== Listen ===========================
 server.listen(8080, function(){
 	console.log('Real-Time Strategy Game server running on *:8080');
 	console.log('A game by Rutger Frieswijk');

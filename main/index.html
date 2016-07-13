@@ -14,11 +14,21 @@
 		
 		<script src="main/javascript/main.js"></script>
 		<link rel="stylesheet" href="main/style/main.css">
-		
-		<script src="client.engine.js"></script>
 	</head>
 
 	<body>
-		Main menu
+		
+		<div id='loginForm'>
+			<h1>Legio I</h1>
+			<hr>
+			<form action="/login" method="post">
+				<input type='text' placeholder='name' name='username'>
+				<input type='password' placeholder='password' name='password'>
+				<input type='submit' value='login'>
+				<input type='submit' value='new player'>
+			</form>
+		</div>
+		
+		
 	</body>
 </html>

@@ -21,5 +21,15 @@
   "bugs": {
     "url": "https://github.com/Superkuuk/RTS/issues"
   },
-  "homepage": "https://github.com/Superkuuk/RTS#readme"
+  "homepage": "https://github.com/Superkuuk/RTS#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-session": "^1.14.0",
+    "orchestrate": "^0.3.16",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "socket.io": "^1.4.8",
+	"bcryptjs": "^2.3.0",
+	"q": "^1.4.1"
+  }
 }
