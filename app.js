@@ -4,9 +4,22 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+
+// Main directory
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/main/index.html');
 });
+
+app.get('/game', function (req, res) {
+  console.log(__dirname + '/game/index.html');
+  res.sendFile(__dirname + '/game/index.html');
+});
+
+app.get('/lobby', function (req, res) {
+  console.log(__dirname + '/lobby/index.html');
+  res.sendFile(__dirname + '/lobby/index.html');
+});
+
 
 	//This handler will listen for requests on /*, any file from the root of our server.
 	//See expressjs documentation for more info on routing.
