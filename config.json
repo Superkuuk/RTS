@@ -1,0 +1,7 @@
+{
+	"database_file": "auth/players.db",
+	"user_restrictions": {
+		"username_length": 3,
+		"password_length": 5
+	}
+}
