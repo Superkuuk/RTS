@@ -25,10 +25,10 @@ function addPlayer() {
 	var error_message = false;
 	
 	// add Player
-	if($("#loginForm input[type=password]:first").length < config.user_restrictions.password_length ){
+	if($("#loginForm input[type=password]:first").val().length < config.user_restrictions.password_length ){
 		error_message = "Password is too short!<br>";
 	}
-	if($("#loginForm input[type=text]").length < config.user_restrictions.username_length ){
+	if($("#loginForm input[type=text]").val().length < config.user_restrictions.username_length ){
 		error_message += "Name is too short!<br>";
 	}
 	if( $("#loginForm input[type=password]:first").val() != $("#loginForm input[type=password]:last").val()){
@@ -42,6 +42,13 @@ function addPlayer() {
 	if(error_message){
 		$("#loginForm span").html(error_message);
 	}else{
+//		$("#retypePassword").attr("disabled", true);
 		$("#loginForm form").submit();
+//		$("#retypePassword").attr("disabled", false);
 	}
 }
+
+$("#loginForm form").submit(function(event){
+	event.preventDefault();
+	addPlayer();
+});

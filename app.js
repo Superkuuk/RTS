@@ -9,6 +9,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 var fs = require("fs");
 var bodyParser = require('body-parser');
+var bcrypt = require('bcryptjs');
 
 app.use(session({secret: 'dinky toy with Duckface horse', cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
@@ -33,22 +34,37 @@ fs.stat(config.database_file, function(error, stats) {
 	}else{
 		console.log('No database file found! Creating one...');
 		fs.writeFile(config.database_file, '', (err) => {
-		  if (err) throw err;
-		  console.log('It\'s made!');
+			if (err) throw err;
+			console.log('File made, started making database...');
+			
+			var db = new sqlite3.Database(config.database_file); // automatically opens the database			
+			db.serialize(function() {
+				db.run("CREATE TABLE accounts (id INTEGER PRIMARY KEY ASC, nickname TEXT, password TEXT)", function(err){
+					if (err) throw err;
+					console.log('Table created');
+				});
+				db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", ["Dinky", bcrypt.hashSync("Toy", 8)], function(err){
+					if (err) throw err;
+					console.log('Dinky created');
+				});
+			});
+			db.close();
 		});
-		
-		// create table for the new database:
-		var db = new sqlite3.Database(config.database_file);
-		db.serialize(function() {
-			db.run("CREATE TABLE accounts (id INTEGER PRIMARY KEY ASC, nickname TEXT, password TEXT)");
-		});
-		db.close();
 	}
 });
 
 
 // =========================== Routing ===========================
+
+app.post('/test', 
+  passport.authenticate('local', { failureRedirect: '/failure' }),
+  function(req, res) {
+    res.redirect('/succes');
+  });
+
 app.get('/', function (req, res) {
+  console.log(req.user);
+  console.log(__dirname + '/main/index.html');
   res.sendFile(__dirname + '/main/index.html');
 });
 
@@ -77,10 +93,11 @@ app.get( '/*' , function( req, res, next ) {
 });
 
 //sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
-app.post('/signin', passport.authenticate('local-signup', {
+app.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',
   failureRedirect: '/'
 }));
+
 
 //sends the request through our local login/signin strategy, and if successful takes user to homepage, otherwise returns then to signin page
 app.post('/login', passport.authenticate('local-login', {
@@ -109,53 +126,45 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-// [NEEDS REWRITE!] Use the LocalStrategy within Passport to login/”signin” users.
-passport.use('local-login', new LocalStrategy(
-  {passReqToCallback : true}, //allows us to pass back the request to the callback
-  function(req, username, password, done) {
-    funct.localAuth(username, password)
-    .then(function (user) {
-      if (user) {
-        console.log("LOGGED IN AS: " + user.username);
-        req.session.success = 'You are successfully logged in ' + user.username + '!';
-        console.log('You are successfully logged in ' + user.username + '!');
-        done(null, user);
-      }
-      if (!user) {
-        console.log("COULD NOT LOG IN");
-        req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
-        console.log('Could not log user in. Please try again.');
-        done(null, user);
-      }
-    })
-    .fail(function (err){
-      console.log(err.body);
-    });
-  }
+passport.use('local-login', new LocalStrategy( {passReqToCallback: true},
+	function(req, username, password, done){
+		funct.localAuth(username, password, (function(obj){
+			if(obj.err == null){
+				if(obj.user){
+					console.log(obj.user.username + ' logged in.');
+					req.session.success = 'You are successfully logged in, ' + obj.user.username + '!';
+					done(null, obj.user);
+				}else{
+					console.log('Could not log user in. Please try again.');
+					req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
+					done(null, obj.user, { message: 'Incorrect password.' });			
+				}
+			}else{
+				console.log('ERROR... : ' + obj.err.body);
+			}	
+		}));	
+	}
 ));
 
 
-// [NEEDS REWRITE!] Use the LocalStrategy within Passport to register/"signup" users.
-passport.use('local-signup', new LocalStrategy(
-  {passReqToCallback : true}, //allows us to pass back the request to the callback
-  function(req, username, password, done) {
-    funct.localReg(username, password)
-    .then(function (user) {
-      if (user) {
-        console.log("REGISTERED: " + user.username);
-        req.session.success = 'You are successfully registered and logged in ' + user.username + '!';
-        done(null, user);
-      }
-      if (!user) {
-        console.log("COULD NOT REGISTER");
-        req.session.error = 'That username is already in use, please try a different one.'; //inform user could not log them in
-        done(null, user);
-      }
-    })
-    .fail(function (err){
-      console.log(err.body);
-    });
-  }
+passport.use('local-signup', new LocalStrategy( {passReqToCallback: true},
+	function(req, username, password, done){
+		funct.localReg(username, password, (function(obj){
+			if(obj.err == null){
+				if(obj.user){
+					console.log(obj.user.username + ' registered!');
+					req.session.success = 'You are successfully registerd and logged in, ' + obj.user.username + '!';
+					done(null, obj.user);
+				}else{
+					console.log('Username already in use, try a different one.');
+					req.session.error = 'Username already in use, try a different one.'; //inform user could not log them in
+					done(null, obj.user, { message: 'Username already in use, try a different one.' });			
+				}
+			}else{
+				console.log('ERROR... : ' + obj.err.body);
+			}
+		}));
+	}
 ));
 
 
