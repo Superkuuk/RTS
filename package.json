@@ -23,13 +23,14 @@
   },
   "homepage": "https://github.com/Superkuuk/RTS#readme",
   "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
     "express": "^4.14.0",
     "express-session": "^1.14.0",
-    "orchestrate": "^0.3.16",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "socket.io": "^1.4.8",
-	"bcryptjs": "^2.3.0",
-	"q": "^1.4.1"
+    "sqlite3": "^3.1.4"
   }
 }

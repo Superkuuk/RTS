@@ -17,18 +17,20 @@
 	</head>
 
 	<body>
-		
+<!-- 	Music can be a bit better! Use the Soundcloud JS widget. Random shuffle a playlist. -->
+<!-- 
+		<iframe width="80px" height="80px" style="opacity:0.8;position:fixed;bottom:0;" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/2747493&amp;auto_play=true&amp;hide_related=false&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false"></iframe>
+ -->
 		<div id='loginForm'>
 			<h1>Legio I</h1>
 			<hr>
 			<form action="/login" method="post">
+				<p>Login:</p>
 				<input type='text' placeholder='name' name='username'>
 				<input type='password' placeholder='password' name='password'>
-				<input type='submit' value='login'>
-				<input type='submit' value='new player'>
+				<input type='submit' value='login'>		
 			</form>
+			<input type='submit' value='new player' onclick="toggleNewPlayer()">
 		</div>
-		
-		
 	</body>
 </html>
