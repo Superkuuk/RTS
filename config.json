@@ -1,4 +1,5 @@
 {
+	"debug": true,
 	"database_path": "auth",
 	"database_file": "players.db",
 	"user_restrictions": {

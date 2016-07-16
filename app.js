@@ -43,17 +43,17 @@ fs.stat(config.database_path, function(err, stats) {
 				if (err == null) {
 					if(stats.isFile()){
 						// File is already there. No need to make a new file.
-						console.log('Database seems legit! Continuing...');
+						if(config.debug) console.log('Database seems legit! Continuing...');
 					}
 				}else{
 					// make file in existing directory
-					console.log('Database file is missing, making one...');
+					if(config.debug) console.log('Database file is missing, making one...');
 					makeDatabaseFile();
 				}
 			});
 		}
 	}else{
-		console.log('Database directory and database file are missing, making directory and file...');
+		if(config.debug) console.log('Database directory and database file are missing, making directory and file...');
 		// make directory
 		fs.mkdir(config.database_path);
 		// make file
@@ -64,17 +64,17 @@ fs.stat(config.database_path, function(err, stats) {
 function makeDatabaseFile() {
 	var databaseFile = config.database_path + '/' + config.database_file;
 	fs.writeFile(databaseFile, '', (err) => {
-		console.log('File made, filling database!');
+		if(config.debug) console.log('File made, filling database!');
 		if (err) throw err;
 		var db = new sqlite3.Database(databaseFile); // automatically opens the database			
 		db.serialize(function() {
 			db.run("CREATE TABLE accounts (id INTEGER PRIMARY KEY ASC, nickname TEXT, password TEXT)", function(err){
 				if (err) throw err;
-				console.log('Table created');
+				if(config.debug) console.log('Table created');
 			});
 			db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", ["Dinky", bcrypt.hashSync("Toy", 8)], function(err){
 				if (err) throw err;
-				console.log('Dinky created'); // test account
+				if(config.debug) console.log('Dinky created'); // test account
 			});
 		});
 		db.close();
@@ -84,24 +84,24 @@ function makeDatabaseFile() {
 // fs.stat(config.database_file, function(error, stats) {
 // 	if(error == null){
 // 		if(stats.isFile()){
-// 			console.log('database found!');
+// 			if(config.debug) console.log('database found!');
 // 			database_exists = true;
 // 		}
 // 	}else{
-// 		console.log('No database file found! Creating one...');
+// 		if(config.debug) console.log('No database file found! Creating one...');
 // 		fs.writeFile(config.database_file, '', (err) => {
 // 			if (err) throw err;
-// 			console.log('File made, started making database...');
+// 			if(config.debug) console.log('File made, started making database...');
 // 			
 // 			var db = new sqlite3.Database(config.database_file); // automatically opens the database			
 // 			db.serialize(function() {
 // 				db.run("CREATE TABLE accounts (id INTEGER PRIMARY KEY ASC, nickname TEXT, password TEXT)", function(err){
 // 					if (err) throw err;
-// 					console.log('Table created');
+// 					if(config.debug) console.log('Table created');
 // 				});
 // 				db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", ["Dinky", bcrypt.hashSync("Toy", 8)], function(err){
 // 					if (err) throw err;
-// 					console.log('Dinky created');
+// 					if(config.debug) console.log('Dinky created');
 // 				});
 // 			});
 // 			db.close();
@@ -114,10 +114,10 @@ function makeDatabaseFile() {
 app.get('/', function (req, res) {
   var playerIsLoggedIn = false;
   if(req.user){
-  	console.log('User ' + req.user.username + ' is logged in!');
+  	if(config.debug) console.log('User ' + req.user.username + ' is logged in!');
   	playerIsLoggedIn = true;
   }else{
-  	console.log('There is no user logged in.');
+  	if(config.debug) console.log('There is no user logged in.');
   }
   res.render('main', {'loggedIn': playerIsLoggedIn, 'user': req.user});
 });
@@ -139,7 +139,7 @@ app.get( '/*' , function( req, res, next ) {
 
 	//This is the current file they have requested
 	var file = req.params[0];
-	console.log(file + " requested.");
+	if(config.debug) console.log(file + " requested.");
 	res.sendFile( __dirname + '/' + file );
 
 });
@@ -159,7 +159,7 @@ app.post('/login', passport.authenticate('local-login', {
 //logs user out of site, deleting them from the session, and returns to homepage
 app.post('/logout', function(req, res){
   var name = req.user.username;
-  console.log("LOGGIN OUT " + name)
+  if(config.debug) console.log("LOGGIN OUT " + name)
   req.logout();
   res.redirect('/');
   req.session.notice = "You have successfully been logged out " + name + "!";
@@ -181,16 +181,16 @@ passport.use('local-login', new LocalStrategy( {passReqToCallback: true},
 		funct.localAuth(username, password, (function(obj){
 			if(obj.err == null){
 				if(obj.user){
-					console.log(obj.user.username + ' logged in.');
+					if(config.debug) console.log(obj.user.username + ' logged in.');
 					req.session.success = 'You are successfully logged in, ' + obj.user.username + '!';
 					done(null, obj.user);
 				}else{
-					console.log('Could not log user in. Please try again.');
+					if(config.debug) console.log('Could not log user in. Please try again.');
 					req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
 					done(null, obj.user, { message: 'Incorrect password.' });			
 				}
 			}else{
-				console.log('ERROR... : ' + obj.err.body);
+				if(config.debug) console.log('ERROR... : ' + obj.err.body);
 			}	
 		}));	
 	}
@@ -202,16 +202,16 @@ passport.use('local-signup', new LocalStrategy( {passReqToCallback: true},
 		funct.localReg(username, password, (function(obj){
 			if(obj.err == null){
 				if(obj.user){
-					console.log(obj.user.username + ' registered!');
+					if(config.debug) console.log(obj.user.username + ' registered!');
 					req.session.success = 'You are successfully registerd and logged in, ' + obj.user.username + '!';
 					done(null, obj.user);
 				}else{
-					console.log('Username already in use, try a different one.');
+					if(config.debug) console.log('Username already in use, try a different one.');
 					req.session.error = 'Username already in use, try a different one.'; //inform user could not log them in
 					done(null, obj.user, { message: 'Username already in use, try a different one.' });			
 				}
 			}else{
-				console.log('ERROR... : ' + obj.err.body);
+				if(config.debug) console.log('ERROR... : ' + obj.err.body);
 			}
 		}));
 	}
@@ -230,10 +230,10 @@ function isLoggedIn(req, res, next) {
 
 // =========================== Functions ===========================
 io.on('connection', function (socket) {
-	console.log('A user connected');
+	if(config.debug) console.log('A user connected');
 	
 	socket.on('disconnect', function(){
-		console.log('User disconnected');
+		if(config.debug) console.log('User disconnected');
 	});
 
 	socket.on('draggable move', function(position){
@@ -253,6 +253,6 @@ io.on('connection', function (socket) {
 
 // =========================== Listen ===========================
 server.listen(8080, function(){
-	console.log('Real-Time Strategy Game server running on *:8080');
+	console.log('Server running on *:8080');
 	console.log('A game by Rutger Frieswijk');
 });

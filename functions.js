@@ -2,11 +2,11 @@ var bcrypt = require('bcryptjs');
 var config = require('./config.json'); //config file contains all tokens and other private info
 var sqlite3 = require("sqlite3").verbose();
 var dbFile = config.database_path +'/'+ config.database_file;
-console.log('functions loaded');
+if(config.debug) console.log('functions loaded');
 
 // Register
 exports.localReg = function (username, password, callback) {
-	console.log('register called');
+	if(config.debug) console.log('register called');
 	var hash = bcrypt.hashSync(password, 8);
 	var user = false;
 	var error = null;
@@ -15,7 +15,7 @@ exports.localReg = function (username, password, callback) {
 	db.serialize(function() {
 		db.each("SELECT nickname FROM accounts WHERE nickname = (?)", username, function(err, row) {
 			if (err) throw err;
-			console.log("Username, "+username+", already exists.");
+			if(config.debug) console.log("Username, "+username+", already exists.");
 		}, (function(err, numberOfRows){
 			// callback after .each
 			if(numberOfRows == 0){
@@ -23,7 +23,7 @@ exports.localReg = function (username, password, callback) {
 				db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", [username, hash], function(err){
 					// callback after insert.
 					if (err) throw err;
-					console.log(username + ' added to the database! New player, yay!');
+					if(config.debug) console.log(username + ' added to the database! New player, yay!');
 					user = {
 						"username": username,
 						"password": hash
@@ -39,7 +39,7 @@ exports.localReg = function (username, password, callback) {
 
 // Login
 exports.localAuth = function (username, password, callback) {
-	console.log('login called');
+	if(config.debug) console.log('login called');
 	var	user = false;
 	var error = null;
 	// check if user matches existing user
@@ -49,13 +49,13 @@ exports.localAuth = function (username, password, callback) {
 			if (err) throw err;
 			if(bcrypt.compareSync(password, row.password)){
 				// there is a mach!
-				console.log(username + ' has good credentials!');
+				if(config.debug) console.log(username + ' has good credentials!');
 				user = {
 					"id": row.id,
 					"username": row.nickname
 				}					
 			}else{
-				console.log('Error occurred when selecting from database: '+ err.body);
+				if(config.debug) console.log('Error occurred when selecting from database: '+ err.body);
 				error = err;
 			}
 		}, function(err, numberOfRows){	// completion of db.each function. Thus the end of the localAuth functions.

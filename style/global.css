@@ -10,3 +10,15 @@ h1 {
 	margin: 0 0 10px 0;
 	font-size: 60px;
 }
+
+a {
+	text-decoration: none;
+	color: #775B27;
+	
+    -webkit-transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+	color: #F5AE2A;
+}
