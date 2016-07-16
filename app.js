@@ -9,7 +9,16 @@ var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 var fs = require("fs");
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var bcrypt = require('bcryptjs');
+var hbs = require('express-hbs');
+
+app.engine('hbs', hbs.express4({
+  partialsDir: __dirname + '/views/partials'
+}));
+app.set('view engine', 'hbs');
+app.set('views', __dirname + '/views');
+
 
 app.use(session({secret: 'dinky toy with Duckface horse', cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
@@ -17,6 +26,7 @@ app.use(passport.session());
 app.use(flash());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(cookieParser());
 
 var config = require('./config.json'); // all configurable options for easy tweaking :)
 var funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
@@ -56,24 +66,30 @@ fs.stat(config.database_file, function(error, stats) {
 
 // =========================== Routing ===========================
 
-app.post('/test', 
-  passport.authenticate('local', { failureRedirect: '/failure' }),
-  function(req, res) {
-    res.redirect('/succes');
-  });
-
-app.get('/', function (req, res) {
-  console.log(req.user);
-  console.log(__dirname + '/main/index.html');
-  res.sendFile(__dirname + '/main/index.html');
+app.get('/test', isLoggedIn, function(req, res) {
+	// isLoggedIn will check if there is a user logged in. If not, redirect to '/', else, continue with this code:
+	console.log(req.user);
 });
 
-app.get('/game', function (req, res) {
+app.get('/', function (req, res) {
+  var playerIsLoggedIn = false;
+  if(req.user){
+  	console.log('User ' + req.user.username + ' is logged in!');
+  	playerIsLoggedIn = true;
+  }else{
+  	console.log('There is no user logged in.');
+  }
+  console.log(__dirname + '/main/index.html');
+  // res.sendFile(__dirname + '/main/index.html');
+  res.render('main', {'loggedIn': playerIsLoggedIn, 'user': req.user});
+});
+
+app.get('/game', isLoggedIn, function (req, res) {
   console.log(__dirname + '/game/index.html');
   res.sendFile(__dirname + '/game/index.html');
 });
 
-app.get('/lobby', function (req, res) {
+app.get('/lobby', isLoggedIn, function (req, res) {
   console.log(__dirname + '/lobby/index.html');
   res.sendFile(__dirname + '/lobby/index.html');
 });
@@ -107,7 +123,7 @@ app.post('/login', passport.authenticate('local-login', {
 
 
 //logs user out of site, deleting them from the session, and returns to homepage
-app.get('/logout', function(req, res){
+app.post('/logout', function(req, res){
   var name = req.user.username;
   console.log("LOGGIN OUT " + name)
   req.logout();
@@ -167,6 +183,16 @@ passport.use('local-signup', new LocalStrategy( {passReqToCallback: true},
 	}
 ));
 
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+} 
 
 // =========================== Functions ===========================
 io.on('connection', function (socket) {

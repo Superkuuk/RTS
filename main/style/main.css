@@ -61,6 +61,19 @@ input[type=submit]:hover {
 	 border: 1px solid #F5AE2A;
 }
 
+#loginForm .menuButtons {
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+}
+
+#loginForm .menuButtons input[type=submit] {
+	margin: 0;
+	margin-bottom: 10px;
+	float: none;
+	width: 50%;
+}
+
 hr {
     height: 30px;
     border-style: solid;
