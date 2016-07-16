@@ -11,26 +11,26 @@ $(document).ready(function(){
 });
 
 function toggleNewPlayer() {
-	$('#loginForm p').html('New Player');
-	$("#loginForm input[type=submit]").remove();
-	$("<input id='retypePassword' type='password' placeholder='retype password' name='password2'>").insertAfter('#loginForm form input[type=password]');
-	$("<input type='submit' value='add player' onclick='addPlayer()'>").insertAfter("#loginForm form");
-	$("<span style='color:red;'></span>").insertAfter("#loginForm form");
+	$('#mainMenu p').html('New Player');
+	$("#mainMenu input[type=submit]").remove();
+	$("<input id='retypePassword' type='password' placeholder='retype password' name='password2'>").insertAfter('#mainMenu form input[type=password]');
+	$("<input type='submit' value='add player' onclick='addPlayer()'>").insertAfter("#mainMenu form");
+	$("<span style='color:red;'></span>").insertAfter("#mainMenu form");
 	
-	$("#loginForm form").prop('action', '/signup');
+	$("#mainMenu form").prop('action', '/signup');
 }
 
 function addPlayer() {
 	var error_message = false;
 	
 	// add Player
-	if($("#loginForm input[type=password]:first").val().length < config.user_restrictions.password_length ){
+	if($("#mainMenu input[type=password]:first").val().length < config.user_restrictions.password_length ){
 		error_message = "Password is too short!<br>";
 	}
-	if($("#loginForm input[type=text]").val().length < config.user_restrictions.username_length ){
+	if($("#mainMenu input[type=text]").val().length < config.user_restrictions.username_length ){
 		error_message += "Name is too short!<br>";
 	}
-	if( $("#loginForm input[type=password]:first").val() != $("#loginForm input[type=password]:last").val()){
+	if( $("#mainMenu input[type=password]:first").val() != $("#mainMenu input[type=password]:last").val()){
 		error_message += "Passwords don't match!<br>";
 	}
 	
@@ -39,15 +39,15 @@ function addPlayer() {
 		error_message += "Username already taken.<br>";
 	}
 	if(error_message){
-		$("#loginForm span").html(error_message);
+		$("#mainMenu span").html(error_message);
 	}else{
 //		$("#retypePassword").attr("disabled", true);
-		$("#loginForm form").submit();
+		$("#mainMenu form").submit();
 //		$("#retypePassword").attr("disabled", false);
 	}
 }
 
-$("#loginForm form").submit(function(event){
+$("#mainMenu form").submit(function(event){
 	event.preventDefault();
 	addPlayer();
 });

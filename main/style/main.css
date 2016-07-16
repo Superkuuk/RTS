@@ -6,7 +6,7 @@ body {
 	background-size: cover;
 }
 
-#loginForm {
+#mainMenu {
 	position: absolute;
 	right: 80px;
 	top: 50px;
@@ -18,7 +18,7 @@ body {
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-#loginForm p {
+#mainMenu p {
 	margin: 0 0 10px 0;
 }
 
@@ -61,17 +61,27 @@ input[type=submit]:hover {
 	 border: 1px solid #F5AE2A;
 }
 
-#loginForm .menuButtons {
+#mainMenu .menuButtons {
 	width: 100%;
 	text-align: center;
 	margin-top: 30px;
 }
 
-#loginForm .menuButtons input[type=submit] {
+#mainMenu .menuButtons input[type=submit] {
 	margin: 0;
 	margin-bottom: 10px;
 	float: none;
 	width: 50%;
+}
+
+#information {
+	width: 100%;
+	position: absolute;
+	top: 100%;
+	background-color: #37322E;
+	color: white;
+	padding: 30px;
+	box-sizing: border-box;
 }
 
 hr {

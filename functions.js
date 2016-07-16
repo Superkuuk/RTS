@@ -1,6 +1,7 @@
 var bcrypt = require('bcryptjs');
 var config = require('./config.json'); //config file contains all tokens and other private info
 var sqlite3 = require("sqlite3").verbose();
+var dbFile = config.database_path +'/'+ config.database_file;
 console.log('functions loaded');
 
 // Register
@@ -10,7 +11,7 @@ exports.localReg = function (username, password, callback) {
 	var user = false;
 	var error = null;
 	// check if user already exists
-	var db = new sqlite3.Database('./' + config.database_file);
+	var db = new sqlite3.Database(dbFile);
 	db.serialize(function() {
 		db.each("SELECT nickname FROM accounts WHERE nickname = (?)", username, function(err, row) {
 			if (err) throw err;
@@ -35,13 +36,14 @@ exports.localReg = function (username, password, callback) {
 	});
 }
 
+
 // Login
 exports.localAuth = function (username, password, callback) {
 	console.log('login called');
 	var	user = false;
 	var error = null;
 	// check if user matches existing user
-	var db = new sqlite3.Database(config.database_file);
+	var db = new sqlite3.Database(dbFile);
 	db.serialize(function() {
 		db.each("SELECT id, nickname, password FROM accounts WHERE nickname = (?)", username, function(err, row) {
 			if (err) throw err;
