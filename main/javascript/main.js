@@ -8,7 +8,6 @@ socket.on('request config return', function(config_recieved){
 });
 
 $(document).ready(function(){
-
 });
 
 function toggleNewPlayer() {
