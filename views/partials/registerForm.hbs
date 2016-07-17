@@ -1,0 +1,54 @@
+<form id='loginForm' action="/signup" method="post">		
+	<p>New Player:</p>
+	<input type='text' placeholder='name' name='username'>
+	<input type='password' placeholder='password' name='password'>
+	<input type='password' placeholder='retype password' name='password2'>
+	<input type='submit' value='register'>		
+</form>
+
+<script>
+	$('.errorField').hide();
+	$('#loginForm input[type=submit]').prop('disabled', true);
+ 	$( "#loginForm input" ).keyup(function() { // username textfield
+		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_length)){
+			$('.errorField').css('top', $("#loginForm input:eq(0)").offset().top - 14);
+			$('.errorField').html('Username too short. Use minimal 3 characters');
+			$('.errorField').show();
+			$('#loginForm input[type=submit]').prop('disabled', true);
+		}else if($( "#loginForm input:eq(1)" ).val().length < (config.user_restrictions.password_length)){
+			$('.errorField').css('top', $("#loginForm input:eq(1)").offset().top - 14);
+			$('.errorField').html('Password too short. Use minimal 5 characters');
+			$('.errorField').show();
+			$('#loginForm input[type=submit]').prop('disabled', true);
+		}else if($( "#loginForm input:eq(1)" ).val() != $( "#loginForm input:eq(2)" ).val()){
+			$('.errorField').css('top', $("#loginForm input:eq(2)").offset().top - 14);
+			$('.errorField').html("Passwords don't match!");
+			$('.errorField').show();
+			$('#loginForm input[type=submit]').prop('disabled', true);
+		}else{
+			$('.errorField').hide();
+			$('#loginForm input[type=submit]').prop('disabled', false);
+		}
+	});
+ 	$( "#loginForm input" ).focus(function() { // username textfield
+		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_length)){
+			$('.errorField').css('top', $("#loginForm input:eq(0)").offset().top - 14);
+			$('.errorField').html('Username too short. Use minimal 3 characters');
+			$('.errorField').show();
+			$('#loginForm input[type=submit]').prop('disabled', true);
+		}else if($( "#loginForm input:eq(1)" ).val().length < (config.user_restrictions.password_length)){
+			$('.errorField').css('top', $("#loginForm input:eq(1)").offset().top - 14);
+			$('.errorField').html('Password too short. Use minimal 5 characters');
+			$('.errorField').show();
+			$('#loginForm input[type=submit]').prop('disabled', true);
+		}else if($( "#loginForm input:eq(1)" ).val() != $( "#loginForm input:eq(2)" ).val()){
+			$('.errorField').css('top', $("#loginForm input:eq(2)").offset().top - 14);
+			$('.errorField').html("Passwords don't match!");
+			$('.errorField').show();
+			$('#loginForm input[type=submit]').prop('disabled', true);
+		}else{
+			$('.errorField').hide();
+			$('#loginForm input[type=submit]').prop('disabled', false);
+		}
+	});
+</script>

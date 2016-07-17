@@ -4,10 +4,9 @@
 		<title> Realtime multiplayer strategy game</title>
 		
 		<link href='https://fonts.googleapis.com/css?family=Quattrocento:400,700|Architects+Daughter' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="style/global.css">
-		
-		<script src="main/javascript/main.js"></script>
-		<link rel="stylesheet" href="main/style/main.css">
+		<link rel="stylesheet" href="client/style/global.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="client/main/style/main.css">
 	</head>
 
 	<body>
@@ -15,31 +14,34 @@
 <!-- 
 		<iframe width="80px" height="80px" style="opacity:0.8;position:fixed;bottom:0;" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/2747493&amp;auto_play=true&amp;hide_related=false&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false"></iframe>
  -->
+	<div id="bg"></div>		
+			<div class='errorField' style="top:226px">{{errorMsg}}</div>
+
 		<div id='mainMenu'>
 			<h1>Legio I</h1>
 			<hr>
 			{{#if loggedIn}}
 				<p>Welcome {{user.username}}!</p>
 				<div class='menuButtons'>
-					<form action="/host" method="post"><input type='submit' value='host game'></form>
-					<form action="/join" method="post"><input type='submit' value='join game'></form>
-					<form action="/profile" method="post"><input type='submit' value='profile'></form>
-					<form action="/logout" method="post"><input type='submit' value='log out'></form>
+					<form id='hostButton' action="/host" method="post"><input type='submit' value='host game'></form>
+					<form id='joinButton' action="/join" method="post"><input type='submit' value='join game'></form>
+					<form id='profileButton' action="/profile" method="post"><input type='submit' value='profile'></form>
+					<form id='loginButton' action="/logout" method="post"><input type='submit' value='log out'></form>
 				</div>
 			{{else}}
-				<form action="/login" method="post">		
-					<p>Login:</p>
-					<input type='text' placeholder='name' name='username'>
-					<input type='password' placeholder='password' name='password'>
-					<input type='submit' value='login'>		
-				</form>
-				<input type='submit' value='new player' onclick="toggleNewPlayer()">
+				{{#if login}}
+					{{> loginForm}}
+				{{else}}
+					{{> registerForm}}
+				{{/if}}
 			{{/if}}
 		</div>
 		
 		<div id="information">
 			{{> information}}
 		</div>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+		
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="client/main/javascript/main.js"></script>
 	</body>
 </html>

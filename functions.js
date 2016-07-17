@@ -18,6 +18,7 @@ exports.localReg = function (username, password, callback) {
 			if(config.debug) console.log("Username, "+username+", already exists.");
 		}, (function(err, numberOfRows){
 			// callback after .each
+			if(config.debug) console.log("Callback after .each started");
 			if(numberOfRows == 0){
 				// username is free, insert player.
 				db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", [username, hash], function(err){
@@ -29,9 +30,9 @@ exports.localReg = function (username, password, callback) {
 						"password": hash
 					}
 					db.close();
-					callback({"err": err, "user": user});
 				});
 			}
+			callback({"err": err, "user": user});
 		}));
 	});
 }

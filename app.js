@@ -81,34 +81,6 @@ function makeDatabaseFile() {
 	});
 }
 
-// fs.stat(config.database_file, function(error, stats) {
-// 	if(error == null){
-// 		if(stats.isFile()){
-// 			if(config.debug) console.log('database found!');
-// 			database_exists = true;
-// 		}
-// 	}else{
-// 		if(config.debug) console.log('No database file found! Creating one...');
-// 		fs.writeFile(config.database_file, '', (err) => {
-// 			if (err) throw err;
-// 			if(config.debug) console.log('File made, started making database...');
-// 			
-// 			var db = new sqlite3.Database(config.database_file); // automatically opens the database			
-// 			db.serialize(function() {
-// 				db.run("CREATE TABLE accounts (id INTEGER PRIMARY KEY ASC, nickname TEXT, password TEXT)", function(err){
-// 					if (err) throw err;
-// 					if(config.debug) console.log('Table created');
-// 				});
-// 				db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", ["Dinky", bcrypt.hashSync("Toy", 8)], function(err){
-// 					if (err) throw err;
-// 					if(config.debug) console.log('Dinky created');
-// 				});
-// 			});
-// 			db.close();
-// 		});
-// 	}
-// });
-
 
 // =========================== Routing ===========================
 app.get('/', function (req, res) {
@@ -119,7 +91,8 @@ app.get('/', function (req, res) {
   }else{
   	if(config.debug) console.log('There is no user logged in.');
   }
-  res.render('main', {'loggedIn': playerIsLoggedIn, 'user': req.user});
+  res.render('main', {'loggedIn': playerIsLoggedIn, 'user': req.user, 'login': true, 'errorMsg': req.session.error});
+  req.session.error = '';
 });
 
 app.post('/game', isLoggedIn, function (req, res) {
@@ -133,21 +106,17 @@ app.post('/lobby', isLoggedIn, function (req, res) {
 	//This handler will listen for requests on /*, any file from the root of our server.
 	//See expressjs documentation for more info on routing.
 
-app.get( '/*' , function( req, res, next ) {
-
-	// TODO add file security. Limit sending files to only the files that are needed.
-
+app.get( '/client/*' , function( req, res, next ) {
 	//This is the current file they have requested
 	var file = req.params[0];
 	if(config.debug) console.log(file + " requested.");
-	res.sendFile( __dirname + '/' + file );
-
+	res.sendFile( __dirname + '/client/' + file );
 });
 
 //sends the request through our local signup strategy, and if successful takes user to homepage, otherwise returns then to signin page
 app.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/',
-  failureRedirect: '/'
+  failureRedirect: '/register'
 }));
 
 //sends the request through our local login/signin strategy, and if successful takes user to homepage, otherwise returns then to signin page
@@ -165,6 +134,9 @@ app.post('/logout', function(req, res){
   req.session.notice = "You have successfully been logged out " + name + "!";
 });
 
+app.get('/register', function(req, res){
+  res.render('main', {'loggedIn': false, 'user': req.user, 'login': false, 'errorMsg': req.session.error});
+});
 
 // =========================== Authentication ===========================
 // Passport session setup.
@@ -178,6 +150,7 @@ passport.deserializeUser(function(obj, done) {
 
 passport.use('local-login', new LocalStrategy( {passReqToCallback: true},
 	function(req, username, password, done){
+		if(config.debug) console.log('Login strategy called.');
 		funct.localAuth(username, password, (function(obj){
 			if(obj.err == null){
 				if(obj.user){
@@ -186,7 +159,7 @@ passport.use('local-login', new LocalStrategy( {passReqToCallback: true},
 					done(null, obj.user);
 				}else{
 					if(config.debug) console.log('Could not log user in. Please try again.');
-					req.session.error = 'Could not log user in. Please try again.'; //inform user could not log them in
+					req.session.error = 'Could not log in. Please try again.'; //inform user could not log them in
 					done(null, obj.user, { message: 'Incorrect password.' });			
 				}
 			}else{
