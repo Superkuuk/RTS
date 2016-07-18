@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var bcrypt = require('bcryptjs');
 var hbs = require('express-hbs');
+var SQLiteStore = require('connect-sqlite3')(session);
 
 app.engine('hbs', hbs.express4({
   partialsDir: __dirname + '/views/partials'
@@ -19,8 +20,14 @@ app.engine('hbs', hbs.express4({
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 
-
-app.use(session({secret: 'dinky toy with Duckface horse', cookie: { maxAge: 60*60*1000 }, resave: true, saveUninitialized: true }));
+app.use(session({
+	store: new SQLiteStore({dir: 'auth/'}),
+	secret: 'your secret',
+	resave: true,
+	saveUninitialized: true,
+	cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+}));
+// app.use(session({secret: 'dinky toy with Duckface horse', cookie: { maxAge: 60*60*1000 }, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -28,6 +35,7 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(cookieParser());
 
+      
 var config = require('./config.json'); // all configurable options for easy tweaking :)
 var funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
 
