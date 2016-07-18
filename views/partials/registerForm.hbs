@@ -5,9 +5,9 @@
 	<input type='password' placeholder='retype password' name='password2'>
 	<input type='submit' value='register'>		
 </form>
+<form action="/"><input type='submit' value='back'></form>
 
 <script>
-	$('.errorField').hide();
 	$('#loginForm input[type=submit]').prop('disabled', true);
  	$( "#loginForm input" ).keyup(function() { // username textfield
 		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_length)){

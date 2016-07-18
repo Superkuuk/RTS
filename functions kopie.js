@@ -13,33 +13,27 @@ exports.localReg = function (username, password, callback) {
 	// check if user already exists
 	var db = new sqlite3.Database(dbFile);
 	db.serialize(function() {
-		var nrOfRowsCheck = 0;
 		db.each("SELECT nickname FROM accounts WHERE nickname = (?)", username, function(err, row) {
 			if (err) throw err;
 			if(config.debug) console.log("Username, "+username+", already exists.");
 		}, (function(err, numberOfRows){
 			// callback after .each
 			if(config.debug) console.log("Callback after .each started");
-			nrOfRowsCheck = numberOfRows;
-		}));
-		if(nrOfRowsCheck == 0){
-			// username is free, insert player.
-			db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", [username, hash], function(err){
-				// callback after insert.
-				if (err) throw err;
-				if(config.debug) console.log(username + ' added to the database! New player, yay!');
-			});
-		}
-		db.each("SELECT id, nickname FROM accounts WHERE nickname = (?)", username, function(err, row) {
-			if (err) throw err;
-			user = {
-				"id": row.id,
-				"username": row.nickname
-			}	
-		}, function(err, numberOfRows){
-			db.close();
+			if(numberOfRows == 0){
+				// username is free, insert player.
+				db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", [username, hash], function(err){
+					// callback after insert.
+					if (err) throw err;
+					if(config.debug) console.log(username + ' added to the database! New player, yay!');
+					user = {
+						"username": username,
+						"password": hash
+					}
+					db.close();
+				});
+			}
 			callback({"err": err, "user": user});
-		});
+		}));
 	});
 }
 
@@ -48,7 +42,7 @@ exports.localReg = function (username, password, callback) {
 exports.localAuth = function (username, password, callback) {
 	if(config.debug) console.log('login called');
 	var	user = false;
-	var err = null;
+	var error = null;
 	// check if user matches existing user
 	var db = new sqlite3.Database(dbFile);
 	db.serialize(function() {
@@ -62,11 +56,12 @@ exports.localAuth = function (username, password, callback) {
 					"username": row.nickname
 				}					
 			}else{
-				if(config.debug) console.log(username + ' tried to log in, but failed. Bad credentials.');
+				if(config.debug) console.log('Error occurred when selecting from database: '+ err.body);
+				error = err;
 			}
 		}, function(err, numberOfRows){	// completion of db.each function. Thus the end of the localAuth functions.
 			db.close();
-			callback({"err": err, "user": user});		
+			callback({"err": error, "user": user});		
 		});
 	});
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title> Realtime multiplayer strategy game</title>
+		<title>Legio I</title>
 		
 		<link href='https://fonts.googleapis.com/css?family=Quattrocento:400,700|Architects+Daughter' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="client/style/global.css">
@@ -10,12 +10,8 @@
 	</head>
 
 	<body>
-<!-- 	Music can be a bit better! Use the Soundcloud JS widget. Random shuffle a playlist. -->
-<!-- 
-		<iframe width="80px" height="80px" style="opacity:0.8;position:fixed;bottom:0;" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/2747493&amp;auto_play=true&amp;hide_related=false&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false"></iframe>
- -->
 	<div id="bg"></div>		
-			<div class='errorField' style="top:226px">{{errorMsg}}</div>
+			<div class='errorField'>{{errorMsg}}</div>
 
 		<div id='mainMenu'>
 			<h1>Legio I</h1>
@@ -23,10 +19,9 @@
 			{{#if loggedIn}}
 				<p>Welcome {{user.username}}!</p>
 				<div class='menuButtons'>
-					<form id='hostButton' action="/host" method="post"><input type='submit' value='host game'></form>
-					<form id='joinButton' action="/join" method="post"><input type='submit' value='join game'></form>
-					<form id='profileButton' action="/profile" method="post"><input type='submit' value='profile'></form>
-					<form id='loginButton' action="/logout" method="post"><input type='submit' value='log out'></form>
+					<form action="/lobby"><input type='submit' value='start game'></form>
+					<form action="/profile"><input type='submit' value='profile'></form>
+					<form action="/logout"><input type='submit' value='log out'></form>
 				</div>
 			{{else}}
 				{{#if login}}

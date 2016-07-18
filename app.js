@@ -20,7 +20,7 @@ app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 
 
-app.use(session({secret: 'dinky toy with Duckface horse', cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
+app.use(session({secret: 'dinky toy with Duckface horse', cookie: { maxAge: 60*60*1000 }, resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -86,26 +86,28 @@ function makeDatabaseFile() {
 app.get('/', function (req, res) {
   var playerIsLoggedIn = false;
   if(req.user){
-  	if(config.debug) console.log('User ' + req.user.username + ' is logged in!');
-  	playerIsLoggedIn = true;
+	if(config.debug) console.log('User ' + req.user.username + ' is logged in!');
+	playerIsLoggedIn = true;
   }else{
-  	if(config.debug) console.log('There is no user logged in.');
+	if(config.debug) console.log('There is no user logged in.');
   }
   res.render('main', {'loggedIn': playerIsLoggedIn, 'user': req.user, 'login': true, 'errorMsg': req.session.error});
   req.session.error = '';
 });
 
-app.post('/game', isLoggedIn, function (req, res) {
+app.get('/game', isLoggedIn, function (req, res) {
   res.render('game');
 });
 
-app.post('/lobby', isLoggedIn, function (req, res) {
+app.get('/lobby', isLoggedIn, function (req, res) {
   res.render('lobby');
 });
 
-	//This handler will listen for requests on /*, any file from the root of our server.
-	//See expressjs documentation for more info on routing.
+app.get('/host', isLoggedIn, function (req, res) {
+  res.render('lobby', {'screen': 'host'});
+});
 
+//This handler will listen for requests on /client/*, any file from the client directory of our server.
 app.get( '/client/*' , function( req, res, next ) {
 	//This is the current file they have requested
 	var file = req.params[0];
@@ -126,7 +128,7 @@ app.post('/login', passport.authenticate('local-login', {
 }));
 
 //logs user out of site, deleting them from the session, and returns to homepage
-app.post('/logout', function(req, res){
+app.get('/logout', function(req, res){
   var name = req.user.username;
   if(config.debug) console.log("LOGGIN OUT " + name)
   req.logout();
@@ -137,7 +139,8 @@ app.post('/logout', function(req, res){
 app.get('/register', function(req, res){
   res.render('main', {'loggedIn': false, 'user': req.user, 'login': false, 'errorMsg': req.session.error});
 });
-
+	
+	
 // =========================== Authentication ===========================
 // Passport session setup.
 passport.serializeUser(function(user, done) {
@@ -201,6 +204,33 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 } 
 
+
+// =========================== Handlebars ===========================
+// use these conditions as: {{#ifCond var1 '==' var2}}
+hbs.registerHelper('ifCond', function (v1, operator, v2, options) {
+    switch (operator) {
+        case '==':
+            return (v1 == v2) ? options.fn(this) : options.inverse(this);
+        case '===':
+            return (v1 === v2) ? options.fn(this) : options.inverse(this);
+        case '<':
+            return (v1 < v2) ? options.fn(this) : options.inverse(this);
+        case '<=':
+            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+        case '>':
+            return (v1 > v2) ? options.fn(this) : options.inverse(this);
+        case '>=':
+            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+        case '&&':
+            return (v1 && v2) ? options.fn(this) : options.inverse(this);
+        case '||':
+            return (v1 || v2) ? options.fn(this) : options.inverse(this);
+        default:
+            return options.inverse(this);
+    }
+});
+
+
 // =========================== Functions ===========================
 io.on('connection', function (socket) {
 	if(config.debug) console.log('A user connected');
@@ -209,12 +239,8 @@ io.on('connection', function (socket) {
 		if(config.debug) console.log('User disconnected');
 	});
 
-	socket.on('draggable move', function(position){
-		socket.broadcast.emit('draggable move return', position);
-	});
-
-	// TODO add [player] before message.
 	socket.on('chat message', function(msg){
+		msg = '[' + 'player placeholder' + '] ' + msg;
 		io.emit('chat message return', msg);
 	});
 	

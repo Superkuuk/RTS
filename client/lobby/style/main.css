@@ -1,8 +1,3 @@
-html {
-	min-width: 620px;
-	min-height: 400px;
-}
-
 #bg {
 	position: absolute;
 	background-image: url('../../style/img/backdrop.jpg');
@@ -15,35 +10,91 @@ html {
 	z-index: -1;
 }
 
-.errorField {
-	background-color: #872727;
+#hostList {
 	position: absolute;
 	right: 441px;
-	width: 200px;
-	padding: 16px;
-	box-sizing: border-box;
-	text-align: left;
-	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	top: 50px;
+	width: 400px;
+	background-color: #37322E;
 	color: white;
-	top: 226px;
-	display: none;
+	text-align: center;
+	padding: 20px 0 30px 0;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	height: 317px;
+	overflow: hidden;
 }
 
+#hostList table {
+	position: absolute;
+	width: 100%;
+	background-color: #443E39;
+	border-top: 1px solid #775B27;
+	border-bottom: 1px solid #775B27;
+	padding: 0;
+	list-style-type: none;
+	border-collapse: collapse;
+	margin: 15px 0;
+    font-variant: small-caps;
+    font-size: 15px;
+    max-height: 65%;
+    overflow-y: scroll;
+    display: block;
+}
 
-/* 
-The little triangle for the errorfield:
- */
-.errorField:after {
+#hostList tr {
+	text-align: left;
+	padding: 5px 15px;
+	cursor: pointer;
+	
+	-webkit-transition: background-color 0.1s ease-in-out;
+    transition: background-color 0.1s ease-in-out;
+}
+
+#hostList td:nth-child(1) {
+	width: 20%;
+	padding-left: 10px;
+}
+#hostList td:nth-child(2) {
+	width: 78%;
+}
+#hostList td:nth-child(3) {
+	width: 5%;
+	padding-right: 10px;
+}
+
+#hostList tr:hover {
+	background-color: #775B27;
+	
+	-webkit-transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#hostList tr:active {
+	background-color: #F5AE2A;
+}
+
+#hostList tr.active {
+	background-color: #F5AE2A;
+}
+
+#arrow {
+	position: absolute;
+	right: 441px;
+	top: 75px;
+	width: 400px;
+}
+
+#arrow:after {
 	content: '';
 	position: absolute;
 	border-style: solid;
 	border-width: 12px 0 12px 20.78px;
-	border-color: transparent #872727;
+	border-color: transparent #37322E;
 	display: block;
 	width: 0;
 	z-index: 1;
 	right: -20px;
-	top: 16px;
+	top: 0px;
 }
 
 #mainMenu {
@@ -71,26 +122,13 @@ input[type=submit]:disabled:hover {
 	margin: 0 0 10px 0;
 }
 
-input {
-	width: 80%;
-	font-size: 17px;
-    border: none;
-    border-bottom: 1px solid #775B27;
-    background-color: #37322E;
-    font-family: 'Architects Daughter', cursive;
-    color: white;
-    margin-bottom: 20px;
-    
-    -webkit-transition: border-bottom 0.2s ease-in-out;
-    transition: border-bottom 0.2s ease-in-out;
-}
-
 input:focus {
 	outline: none;
-	border-bottom: 1px solid #F5AE2A;
 }
 
 input[type=submit] {
+	font-family: 'Architects Daughter', cursive;
+	color: white;
 	cursor: pointer;
 	border: 1px solid #775B27;
     width: 35%;
