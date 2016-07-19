@@ -2,7 +2,6 @@ console.log('Starting game server...');
 
 var app = require('express')();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -14,20 +13,24 @@ var bcrypt = require('bcryptjs');
 var hbs = require('express-hbs');
 var SQLiteStore = require('connect-sqlite3')(session);
 
+var games = require('./games.js');
+
+var sessionMiddleware = session({
+    name: "LegioI",
+    secret: "dinkytoywithDuckfacehorse",
+    store: new SQLiteStore({dir: 'auth/'}),
+	resave: true,
+	saveUninitialized: true,
+	cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+});
+
 app.engine('hbs', hbs.express4({
   partialsDir: __dirname + '/views/partials'
 }));
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 
-app.use(session({
-	store: new SQLiteStore({dir: 'auth/'}),
-	secret: 'your secret',
-	resave: true,
-	saveUninitialized: true,
-	cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
-}));
-// app.use(session({secret: 'dinky toy with Duckface horse', cookie: { maxAge: 60*60*1000 }, resave: true, saveUninitialized: true }));
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -35,6 +38,10 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(cookieParser());
 
+var io = require("socket.io")(server).use(function(socket, next){
+        // Wrap the express middleware
+        sessionMiddleware(socket.request, {}, next);
+    });
       
 var config = require('./config.json'); // all configurable options for easy tweaking :)
 var funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
@@ -108,7 +115,7 @@ app.get('/game', isLoggedIn, function (req, res) {
 });
 
 app.get('/lobby', isLoggedIn, function (req, res) {
-  res.render('lobby');
+  res.render('lobby', {'user': req.user.username});
 });
 
 app.get('/host', isLoggedIn, function (req, res) {
@@ -248,12 +255,24 @@ io.on('connection', function (socket) {
 	});
 
 	socket.on('chat message', function(msg){
-		msg = '[' + 'player placeholder' + '] ' + msg;
+		var username = socket.request.session.passport.user.username;
+		msg = '[' + username + '] ' + msg;
 		io.emit('chat message return', msg);
 	});
 	
 	socket.on('request config', function(){
+		if(config.debug) console.log('Config requested');
 		socket.emit('request config return', config);
+	});
+	
+	socket.on('host game', function(){
+		var username = socket.request.session.passport.user.username;
+		if(config.debug) console.log('New game hosted by '+ username);
+		games.add(username);
+		var game = games.getById(games.getIdByName(username));
+		console.log(game);
+		socket.join(game.id);
+		io.emit('host game return', game);
 	});
 });
 

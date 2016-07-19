@@ -1,4 +1,4 @@
-html {
+html, body {
 	min-width: 620px;
 	min-height: 400px;
 }
@@ -13,6 +13,7 @@ html {
 	width: 100%;
 	height: 100%;
 	z-index: -1;
+
 }
 
 .errorField {
