@@ -152,7 +152,9 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/register', function(req, res){
+	console.log('=====> '+req.session.error); 
   res.render('main', {'loggedIn': false, 'user': req.user, 'login': false, 'errorMsg': req.session.error});
+  req.session.error = '';
 });
 	
 	

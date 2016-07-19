@@ -3,7 +3,7 @@
 	"database_path": "auth",
 	"database_file": "players.db",
 	"user_restrictions": {
-		"username_length": 3,
-		"password_length": 5
+		"username_min_length": 3,
+		"password_min_length": 5
 	}
 }

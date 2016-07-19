@@ -8,14 +8,17 @@
 <form action="/"><input type='submit' value='back'></form>
 
 <script>
+	if($('.errorField').html() == ''){
+		$('.errorField').hide();
+	}
 	$('#loginForm input[type=submit]').prop('disabled', true);
  	$( "#loginForm input" ).keyup(function() { // username textfield
-		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_length)){
+		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_min_length)){
 			$('.errorField').css('top', $("#loginForm input:eq(0)").offset().top - 14);
 			$('.errorField').html('Username too short. Use minimal 3 characters');
 			$('.errorField').show();
 			$('#loginForm input[type=submit]').prop('disabled', true);
-		}else if($( "#loginForm input:eq(1)" ).val().length < (config.user_restrictions.password_length)){
+		}else if($( "#loginForm input:eq(1)" ).val().length < (config.user_restrictions.password_min_length)){
 			$('.errorField').css('top', $("#loginForm input:eq(1)").offset().top - 14);
 			$('.errorField').html('Password too short. Use minimal 5 characters');
 			$('.errorField').show();
@@ -31,12 +34,12 @@
 		}
 	});
  	$( "#loginForm input" ).focus(function() { // username textfield
-		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_length)){
+		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_min_length)){
 			$('.errorField').css('top', $("#loginForm input:eq(0)").offset().top - 14);
 			$('.errorField').html('Username too short. Use minimal 3 characters');
 			$('.errorField').show();
 			$('#loginForm input[type=submit]').prop('disabled', true);
-		}else if($( "#loginForm input:eq(1)" ).val().length < (config.user_restrictions.password_length)){
+		}else if($( "#loginForm input:eq(1)" ).val().length < (config.user_restrictions.password_min_length)){
 			$('.errorField').css('top', $("#loginForm input:eq(1)").offset().top - 14);
 			$('.errorField').html('Password too short. Use minimal 5 characters');
 			$('.errorField').show();

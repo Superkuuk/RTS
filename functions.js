@@ -13,33 +13,37 @@ exports.localReg = function (username, password, callback) {
 	// check if user already exists
 	var db = new sqlite3.Database(dbFile);
 	db.serialize(function() {
-		var nrOfRowsCheck = 0;
+		var existing = false;
 		db.each("SELECT nickname FROM accounts WHERE nickname = (?)", username, function(err, row) {
 			if (err) throw err;
 			if(config.debug) console.log("Username, "+username+", already exists.");
+			existing = true;
 		}, (function(err, numberOfRows){
 			// callback after .each
-			if(config.debug) console.log("Callback after .each started");
-			nrOfRowsCheck = numberOfRows;
+			if(config.debug) console.log("Callback after .each started. Number of rows: " + numberOfRows);
+
+			if(!existing){
+				// username is free, insert player.
+				db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", [username, hash], function(err){
+					// callback after insert.
+					if (err) throw err;
+					if(config.debug) console.log(username + ' added to the database! New player, yay!');
+				});
+				db.each("SELECT id, nickname FROM accounts WHERE nickname = (?)", username, function(err, row) {
+					if (err) throw err;
+					user = {
+						"id": row.id,
+						"username": row.nickname
+					}	
+				}, function(err, numberOfRows){
+					db.close();
+					callback({"err": err, "user": user});
+				});
+			}else{
+				db.close();
+				callback({"err": err, "user": user});			
+			}
 		}));
-		if(nrOfRowsCheck == 0){
-			// username is free, insert player.
-			db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", [username, hash], function(err){
-				// callback after insert.
-				if (err) throw err;
-				if(config.debug) console.log(username + ' added to the database! New player, yay!');
-			});
-		}
-		db.each("SELECT id, nickname FROM accounts WHERE nickname = (?)", username, function(err, row) {
-			if (err) throw err;
-			user = {
-				"id": row.id,
-				"username": row.nickname
-			}	
-		}, function(err, numberOfRows){
-			db.close();
-			callback({"err": err, "user": user});
-		});
 	});
 }
 

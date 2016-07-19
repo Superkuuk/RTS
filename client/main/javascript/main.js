@@ -1,7 +1,7 @@
 var socket = io();
 
 // set config variable with defaults. Just in case that someone is really, really fast! (or the server a bit slow ;) )
-var config = {user_restrictions: {password_length: 5, username_length: 3}};
+var config = {user_restrictions: {password_min_length: 5, username_min_length: 3}};
 socket.emit('request config');
 socket.on('request config return', function(config_recieved){
 	config = config_recieved;
