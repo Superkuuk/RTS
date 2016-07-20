@@ -1,4 +1,5 @@
 console.log('Starting game server...');
+var config = require('./config.json'); // all configurable options for easy tweaking :)
 
 var app = require('express')();
 var server = require('http').Server(app);
@@ -18,7 +19,7 @@ var games = require('./games.js');
 var sessionMiddleware = session({
     name: "LegioI",
     secret: "dinkytoywithDuckfacehorse",
-    store: new SQLiteStore({dir: 'auth/'}),
+    store: new SQLiteStore({dir: config.database_path}),
 	resave: true,
 	saveUninitialized: true,
 	cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
@@ -43,7 +44,6 @@ var io = require("socket.io")(server).use(function(socket, next){
         sessionMiddleware(socket.request, {}, next);
     });
       
-var config = require('./config.json'); // all configurable options for easy tweaking :)
 var funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
 
 // =========================== Database Setup ===========================
@@ -152,7 +152,6 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/register', function(req, res){
-	console.log('=====> '+req.session.error); 
   res.render('main', {'loggedIn': false, 'user': req.user, 'login': false, 'errorMsg': req.session.error});
   req.session.error = '';
 });

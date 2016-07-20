@@ -1,6 +1,6 @@
 {
 	"debug": true,
-	"database_path": "auth",
+	"database_path": "database",
 	"database_file": "players.db",
 	"user_restrictions": {
 		"username_min_length": 3,
