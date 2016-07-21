@@ -1,5 +1,6 @@
 {
 	"debug": true,
+	"show_requested_files_in_log": false,
 	"database_path": "database",
 	"database_file": "players.db",
 	"user_restrictions": {

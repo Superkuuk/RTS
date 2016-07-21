@@ -44,11 +44,11 @@ var io = require("socket.io")(server).use(function(socket, next){
     });
 
 // routes
-require('./app/routes')(app, passport);
+require('./app/routes')(app, passport, games);
 // passport setup
 require('./app/passport')(passport);
 // sockets
-require('./app/sockets')(io);
+require('./app/sockets')(io, games);
 
 
 // =========================== Database Setup ===========================

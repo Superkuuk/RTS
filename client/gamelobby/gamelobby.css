@@ -1,0 +1,116 @@
+body {
+	padding: 0;
+	margin: 0;
+	font-family: 'Architects Daughter', cursive;
+    background-color: #37322E;
+}
+
+span {
+	color: white;
+	width: 100%;
+	text-align: center;
+	position: fixed;
+	font-size: 20px;
+}
+
+input:focus {
+	outline: none;
+}
+
+input[type=submit] {
+	font-family: 'Architects Daughter', cursive;
+	color: white;
+	cursor: pointer;
+	border: 1px solid #775B27;
+    width: 35%;
+    float: left;
+    margin-left: 10%;
+    background-color: #443E39;
+    font-variant: small-caps;
+    font-size: 15px;
+    padding: 5px 0;
+    margin-top: 20px;
+    
+    -webkit-transition: border 0.2s ease-in-out;
+    transition: border 0.2s ease-in-out;
+}
+
+input[type=submit]:hover {
+	 border: 1px solid #F5AE2A;
+}
+
+#host {
+	color: white;
+	background-color: #37322E;
+	position: fixed;
+	width: 90%;
+	height: 90%;
+	left: 5%;
+	top: 5%;
+}
+
+#settings {
+	position: absolute;
+	right: 0;
+	background-color: #443E39;
+	border: 1px solid #775B27;
+	width: 40%;
+	height: calc(100% - 53px);
+	box-sizing: border-box;
+	padding: 10px;
+}
+
+#playerBox {
+	position: absolute;
+	box-sizing: border-box;
+	margin: 15px;
+	width: 60%;
+}
+
+#chatBox {
+	width: calc(60% - 20px);
+	bottom: 0;
+	position: absolute;
+	margin: 10px;
+	font-size: 17px;
+    border: none;
+    border-bottom: 1px solid #775B27;
+    background-color: #37322E;
+    font-family: 'Architects Daughter', cursive;
+    color: white;
+    height: 34px;
+    box-sizing: border-box;
+    
+    -webkit-transition: border-bottom 0.2s ease-in-out;
+    transition: border-bottom 0.2s ease-in-out;
+}
+
+#chatBox:focus {
+	outline: none;
+	border-bottom: 1px solid #F5AE2A;
+}
+
+#chatList {
+	position: absolute;
+	box-sizing: border-box;
+	font-size: 14px;
+	background-color: #443E39;
+	border: 1px solid #775B27;
+	width: calc(60% + 1px);
+	bottom: 54px;
+	padding: 10px;
+	height: 40%;
+	overflow-y: auto;
+}
+
+#chatList p {
+	margin: 0;
+}
+
+#buttons {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	width: 40%;
+	box-sizing: border-box;
+}

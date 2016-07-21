@@ -8,6 +8,7 @@ exports.add = function(hostname, description, max_players, password) {
 	uniqueGameID += 1;
 	if(config.debug) console.log('==== Game added ====');
 	if(config.debug) console.log(gameList);
+	return (uniqueGameID - 1);
 }
 
 exports.getList = function(){
