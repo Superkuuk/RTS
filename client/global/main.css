@@ -1,0 +1,318 @@
+body {
+	padding: 0;
+	margin: 0;
+	font-family: 'Architects Daughter', cursive;
+}
+
+h1 {
+	font-family: 'Quattrocento', serif;
+	color: #F5AE2A;
+	margin: 0 0 10px 0;
+	font-size: 60px;
+}
+
+a {
+	text-decoration: none;
+	color: #775B27;
+	
+    -webkit-transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+	color: #F5AE2A;
+}
+
+.checkBox {
+	width: 20px;
+	height: 20px;
+	position: relative;
+	margin-top: 6px;
+	background: #775B27;
+	float: left;
+}
+
+.checkBox label {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	background-color: #37322E;
+}
+
+.checkBox label:after {
+	content: '';
+	width: 9px;
+	height: 5px;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	border: 3px solid #F5AE2A;
+	border-top: none;
+	border-right: none;
+	background: transparent;
+	opacity: 0;
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+.checkBox label:hover::after {
+	opacity: 0.3;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.checkBox input[type=checkbox] {
+	visibility: hidden;
+}
+
+.checkBox input[type=checkbox]:checked + label:after {
+	opacity: 1;
+}
+
+
+input[type=password]:disabled {
+	opacity: 0.3;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+}
+
+#bg {
+	position: absolute;
+	background-image: url('../global/img/backdrop.jpg');
+	background-repeat: no-repeat;
+	background-position: left bottom; 
+	background-color: yellow;
+	background-size: cover;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+
+}
+
+.errorField {
+	background-color: #872727;
+	position: absolute;
+	right: 441px;
+	width: 200px;
+	padding: 16px;
+	box-sizing: border-box;
+	text-align: left;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	color: white;
+	top: 226px;
+}
+
+
+/* 
+The little triangle for the errorfield:
+ */
+.errorField:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 12px 0 12px 20.78px;
+	border-color: transparent #872727;
+	display: block;
+	width: 0;
+	z-index: 1;
+	right: -20px;
+	top: 16px;
+}
+
+#mainMenu {
+	position: absolute;
+	right: 80px;
+	top: 50px;
+	width: 300px;
+	background-color: #37322E;
+	color: white;
+	text-align: center;
+	padding: 20px 20px 30px 20px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+input[type=submit]:disabled {
+	opacity: 0.3;
+	cursor: default;
+}
+
+input[type=submit]:disabled:hover {
+	border: 1px solid #775B27;
+}
+
+#mainMenu p {
+	margin: 0 0 10px 0;
+}
+
+input {
+	width: 80%;
+	font-size: 17px;
+    border: none;
+    border-bottom: 1px solid #775B27;
+    background-color: #37322E;
+    font-family: 'Architects Daughter', cursive;
+    color: white;
+    margin-bottom: 20px;
+    
+    -webkit-transition: border-bottom 0.2s ease-in-out;
+    transition: border-bottom 0.2s ease-in-out;
+}
+
+input:focus {
+	outline: none;
+	border-bottom: 1px solid #F5AE2A;
+}
+
+input[type=submit] {
+	cursor: pointer;
+	border: 1px solid #775B27;
+    width: 35%;
+    float: left;
+    margin-left: 10%;
+    background-color: #443E39;
+    font-variant: small-caps;
+    font-size: 15px;
+    padding: 5px 0;
+    margin-top: 20px;
+    
+    -webkit-transition: border 0.2s ease-in-out;
+    transition: border 0.2s ease-in-out;
+}
+
+input[type=submit]:hover {
+	 border: 1px solid #F5AE2A;
+}
+
+#mainMenu .menuButtons {
+	width: 100%;
+	text-align: center;
+	margin-top: 30px;
+}
+
+#mainMenu .menuButtons input[type=submit] {
+	margin: 0;
+	margin-bottom: 10px;
+	float: none;
+	width: 50%;
+}
+
+#information {
+	width: 100%;
+	position: absolute;
+	top: 100%;
+	background-color: #37322E;
+	color: white;
+	padding: 30px;
+	box-sizing: border-box;
+	z-index: -1;
+}
+
+hr {
+    height: 30px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 0 0 0;
+    border-radius: 20px;
+    margin-top: 30px;
+}
+
+hr:before { /* Not really supposed to work, but does */
+    display: block;
+    content: "";
+    height: 30px;
+    margin-top: -31px;
+    border-style: solid;
+    border-color: black;
+    border-width: 0 0 1px 0;
+    border-radius: 20px;
+}
+
+#hostList {
+	position: absolute;
+	right: 441px;
+	top: 50px;
+	width: 400px;
+	background-color: #37322E;
+	color: white;
+	text-align: center;
+	padding: 20px 0 30px 0;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+	height: 317px;
+	overflow: hidden;
+}
+
+#hostList table {
+	position: absolute;
+	width: 100%;
+	background-color: #443E39;
+	border-top: 1px solid #775B27;
+	border-bottom: 1px solid #775B27;
+	padding: 0;
+	list-style-type: none;
+	border-collapse: collapse;
+	margin: 15px 0;
+    font-variant: small-caps;
+    font-size: 15px;
+    max-height: 65%;
+    overflow-y: scroll;
+    display: block;
+}
+
+#hostList tr {
+	text-align: left;
+	padding: 5px 15px;
+	cursor: pointer;
+	
+	-webkit-transition: background-color 0.1s ease-in-out;
+    transition: background-color 0.1s ease-in-out;
+}
+
+#hostList td:nth-child(1) {
+	width: 20%;
+	padding-left: 10px;
+}
+#hostList td:nth-child(2) {
+	width: 78%;
+}
+#hostList td:nth-child(3) {
+	width: 5%;
+	padding-right: 10px;
+}
+
+#hostList tr:hover {
+	background-color: #775B27;
+	
+	-webkit-transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out;
+}
+
+#hostList tr:active {
+	background-color: #F5AE2A;
+}
+
+#hostList tr.active {
+	background-color: #F5AE2A;
+}
+
+#arrow {
+	position: absolute;
+	right: 441px;
+	top: 75px;
+	width: 400px;
+}
+
+#arrow:after {
+	content: '';
+	position: absolute;
+	border-style: solid;
+	border-width: 12px 0 12px 20.78px;
+	border-color: transparent #37322E;
+	display: block;
+	width: 0;
+	z-index: 1;
+	right: -20px;
+	top: 0px;
+}

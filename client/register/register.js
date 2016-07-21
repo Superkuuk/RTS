@@ -1,18 +1,18 @@
-<form id='loginForm' action="/signup" method="post">		
-	<p>New Player:</p>
-	<input type='text' placeholder='name' name='username'>
-	<input type='password' placeholder='password' name='password'>
-	<input type='password' placeholder='retype password' name='password2'>
-	<input type='submit' value='register'>		
-</form>
-<form action="/"><input type='submit' value='back'></form>
+var socket = io();
 
-<script>
+// set config variable with defaults. Just in case that someone is really, really fast! (or the server a bit slow ;) )
+var config = {user_restrictions: {password_min_length: 5, username_min_length: 3}};
+socket.emit('request config');
+socket.on('request config return', function(config_recieved){
+	config = config_recieved;
+});
+
+$(document).ready(function(){
 	if($('.errorField').html() == ''){
 		$('.errorField').hide();
 	}
 	$('#loginForm input[type=submit]').prop('disabled', true);
- 	$( "#loginForm input" ).keyup(function() { // username textfield
+	$( "#loginForm input" ).keyup(function() { // username textfield
 		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_min_length)){
 			$('.errorField').css('top', $("#loginForm input:eq(0)").offset().top - 14);
 			$('.errorField').html('Username too short. Use minimal 3 characters');
@@ -33,7 +33,7 @@
 			$('#loginForm input[type=submit]').prop('disabled', false);
 		}
 	});
- 	$( "#loginForm input" ).focus(function() { // username textfield
+	$( "#loginForm input" ).focus(function() { // username textfield
 		if($( "#loginForm input:eq(0)" ).val().length < (config.user_restrictions.username_min_length)){
 			$('.errorField').css('top', $("#loginForm input:eq(0)").offset().top - 14);
 			$('.errorField').html('Username too short. Use minimal 3 characters');
@@ -54,4 +54,4 @@
 			$('#loginForm input[type=submit]').prop('disabled', false);
 		}
 	});
-</script>
+});

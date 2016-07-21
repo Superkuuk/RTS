@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Legio I</title>
+		
+		<link href='https://fonts.googleapis.com/css?family=Quattrocento:400,700|Architects+Daughter' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="client/global/main.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="client/register/register.js"></script>
+	</head>
+
+	<body>
+	<div id="bg"></div>
+		<div class='errorField'></div>
+		<div id='mainMenu'>
+			<h1>Legio I</h1>
+			<hr>
+			<form id='loginForm' action="/signup" method="post">		
+				<p>New Player:</p>
+				<input type='text' placeholder='name' name='username'>
+				<input type='password' placeholder='password' name='password'>
+				<input type='password' placeholder='retype password' name='password2'>
+				<input type='submit' value='register'>		
+			</form>
+			<form action="/"><input type='submit' value='back'></form>
+		</div>
+		
+		<div id="information">
+			{{> information}}
+		</div>
+		
+	</body>
+</html>
