@@ -6,18 +6,21 @@
 		<link href='https://fonts.googleapis.com/css?family=Quattrocento:400,700|Architects+Daughter' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="client/style/global.css">
 		<link rel="stylesheet" href="client/lobby/style/main.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="client/lobby/javascript/main.js"></script>
 	</head>
 
 	<body>
-		<div id="bg"></div>
-		{{#ifCond screen "==" "host"}}
-			{{> hostScreen}}
-		{{/ifCond}}
-		
+		<div id="bg"></div>		
 		<div id="arrow"></div>
 		<div id='hostList'>
-			List of available games
-			<table id="tbl"></table>
+			{{#ifCond screen "==" "host"}}
+				{{> startHost}}
+			{{else}}
+				List of available games
+				<table id="tbl"></table>			
+			{{/ifCond}}
 		</div>
 		
 		<div id='mainMenu'>
@@ -32,10 +35,6 @@
 		</div>
 		<div id="information">
 			{{> information}}
-		</div>		
-		
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-		<script src="client/lobby/javascript/main.js"></script>
+		</div>
 	</body>
 </html>

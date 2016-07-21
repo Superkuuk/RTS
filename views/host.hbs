@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Legio I - New Game</title>
+		
+		<link href='https://fonts.googleapis.com/css?family=Quattrocento:400,700|Architects+Daughter' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="client/style/global.css">
+		<link rel="stylesheet" href="client/host/style/main.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="client/host/javascript/main.js"></script>
+	</head>
+
+	<body>
+		<div id="bg"></div>		
+		<div id="blurredBack">
+			<div id="host">
+				<div id="settings">
+					Here will come all the settings for the game.
+				</div>
+				<table id="playerBox">
+					<tr>
+						<th>Player</th>
+						<th>Option</th>
+						<th>Team</th>
+					</tr>
+					<tr>
+						<td>Dinky</td>
+						<td>option (ex. Dutch)</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>Superkuuk</td>
+						<td>option (ex. Dutch)</td>
+						<td>1</td>
+					</tr>
+					<tr>
+						<td>Poppie</td>
+						<td>option (ex. Dutch)</td>
+						<td>2</td>
+					</tr>
+				</table>
+				<div id="chatList"></div>
+				<input id="chatBox" type="text" placeholder="chat">
+				<div id="buttons">
+					<form action="/start"><input type='submit' value='start' disabled></form>
+					<form action="/lobby"><input type='submit' value='back' onclick="socket.emit('host cancel')"></form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

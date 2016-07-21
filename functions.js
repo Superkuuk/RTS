@@ -9,7 +9,7 @@ exports.localReg = function (username, password, callback) {
 	if(config.debug) console.log('register called');
 	var hash = bcrypt.hashSync(password, 8);
 	var user = false;
-	var error = null;
+	var err = null;
 	// check if user already exists
 	var db = new sqlite3.Database(dbFile);
 	db.serialize(function() {

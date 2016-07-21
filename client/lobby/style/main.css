@@ -10,6 +10,89 @@
 	z-index: -1;
 }
 
+input {
+	width: 80%;
+	font-size: 17px;
+    border: none;
+    border-bottom: 1px solid #775B27;
+    background-color: #37322E;
+    font-family: 'Architects Daughter', cursive;
+    color: white;
+    margin-bottom: 20px;
+    
+    -webkit-transition: border-bottom 0.2s ease-in-out;
+    transition: border-bottom 0.2s ease-in-out;
+}
+
+input:focus {
+	outline: none;
+	border-bottom: 1px solid #F5AE2A;
+}
+
+input[type=password] {
+	width: 90%;
+}
+
+
+
+
+.checkBox {
+	width: 20px;
+	height: 20px;
+	position: relative;
+	margin-top: 6px;
+	background: #775B27;
+	float: left;
+}
+
+.checkBox label {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	background-color: #37322E;
+}
+
+.checkBox label:after {
+	content: '';
+	width: 9px;
+	height: 5px;
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	border: 3px solid #F5AE2A;
+	border-top: none;
+	border-right: none;
+	background: transparent;
+	opacity: 0;
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+.checkBox label:hover::after {
+	opacity: 0.3;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+}
+
+.checkBox input[type=checkbox] {
+	visibility: hidden;
+}
+
+.checkBox input[type=checkbox]:checked + label:after {
+	opacity: 1;
+}
+
+
+input[type=password]:disabled {
+	opacity: 0.3;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+}
+
+
 #hostList {
 	position: absolute;
 	right: 441px;

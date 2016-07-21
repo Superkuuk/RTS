@@ -1,5 +1,4 @@
 console.log('Starting game server...');
-var config = require('./config.json'); // all configurable options for easy tweaking :)
 
 var app = require('express')();
 var server = require('http').Server(app);
@@ -14,6 +13,8 @@ var bcrypt = require('bcryptjs');
 var hbs = require('express-hbs');
 var SQLiteStore = require('connect-sqlite3')(session);
 
+var config = require('./config.json'); // all configurable options for easy tweaking :)   
+var funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
 var games = require('./games.js');
 
 var sessionMiddleware = session({
@@ -43,8 +44,6 @@ var io = require("socket.io")(server).use(function(socket, next){
         // Wrap the express middleware
         sessionMiddleware(socket.request, {}, next);
     });
-      
-var funct = require('./functions.js'); //funct file contains our helper functions for our Passport and database work
 
 // =========================== Database Setup ===========================
 var sqlite3 = require("sqlite3").verbose();
@@ -155,7 +154,18 @@ app.get('/register', function(req, res){
   res.render('main', {'loggedIn': false, 'user': req.user, 'login': false, 'errorMsg': req.session.error});
   req.session.error = '';
 });
-	
+
+app.post('/newGame', function(req, res){
+	console.log(games.getIdByName(req.user.username));
+	if(games.getIdByName(req.user.username) != null){
+		res.render('lobby');
+	}else{
+		var password = null;
+		if(req.body.check) password = req.body.pass;
+		games.add(req.user.username, req.body.description, req.body.nrOfPlayers, password);
+		res.render('host');
+	}
+});
 	
 // =========================== Authentication ===========================
 // Passport session setup.
@@ -163,8 +173,8 @@ passport.serializeUser(function(user, done) {
   done(null, user);
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+passport.deserializeUser(function(user, done) {
+  done(null, user);
 });
 
 passport.use('local-login', new LocalStrategy( {passReqToCallback: true},
@@ -250,9 +260,18 @@ hbs.registerHelper('ifCond', function (v1, operator, v2, options) {
 // =========================== Functions ===========================
 io.on('connection', function (socket) {
 	if(config.debug) console.log('A user connected');
+// 			if(config.debug) console.log(socket.request.session.passport);
+// 			if(socket.request.session.passport.user){
+// 				var username = socket.request.session.passport.user.username;
+// 				var gameID = games.getIdByName(username);
+// 				if(config.debug) console.log('game ID: ' + gameID);
+// 				if(gameID != null){
+// 					games.remove(gameID);
+// 				}
+// 			}
 	
 	socket.on('disconnect', function(){
-		if(config.debug) console.log('User disconnected');
+		if(config.debug) console.log('User disconnected');	
 	});
 
 	socket.on('chat message', function(msg){
@@ -266,15 +285,15 @@ io.on('connection', function (socket) {
 		socket.emit('request config return', config);
 	});
 	
-	socket.on('host game', function(){
-		var username = socket.request.session.passport.user.username;
-		if(config.debug) console.log('New game hosted by '+ username);
-		games.add(username);
-		var game = games.getById(games.getIdByName(username));
-		console.log(game);
-		socket.join(game.id);
-		io.emit('host game return', game);
+	socket.on('request games', function(){
+		socket.emit('request games return', games.getList());
 	});
+	
+	socket.on('host cancel', function(){
+		var username = socket.request.session.passport.user.username;
+		games.remove(games.getIdByName(username));
+	});
+	
 });
 
 

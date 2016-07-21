@@ -1,11 +1,29 @@
 var socket = io();
 
+// set config variable with defaults. Just in case that someone is really, really fast! (or the server a bit slow ;) )
+var config = {user_restrictions: {password_min_length: 5, username_min_length: 3}};
+socket.emit('request config');
+socket.on('request config return', function(config_recieved){
+	config = config_recieved;
+	$('#StartHostGameForm input[type=number]').prop('min', config.game_restrictions.min_players);
+	$('#StartHostGameForm input[type=number]').prop('max', config.game_restrictions.max_players);
+	$('#StartHostGameForm input[type=text]').prop('maxlength', config.game_restrictions.description_max_length);
+});
+var games = [];
+
 $(document).ready(function(){
-	var w = (document.getElementById('tbl').offsetWidth - document.getElementById('tbl').clientWidth);
-	$('table').css({
-		'padding-right': w + 'px',
-		'width': $('#hostList').width() + w
-	});
+	if($('#tbl').length == 1){
+		var w = (document.getElementById('tbl').offsetWidth - document.getElementById('tbl').clientWidth);
+		$('table').css({
+			'padding-right': w + 'px',
+			'width': $('#hostList').width() + w
+		});
+		
+		// request every 5000ms = 5 sec the gamelist.
+		setInterval(function(){ 
+			socket.emit('request games');
+		}, 2000);
+	}
 });
 
 function hostListClick(obj, id){
@@ -21,25 +39,20 @@ function hostListClick(obj, id){
 	}
 }
 
-$('#chatBox').keypress(function(e){
-	if(e.which == 13 && $('#chatBox').val().length != 0){
-		socket.emit('chat message', $('#chatBox').val());
-		$('#chatBox').val('');
+socket.on('request games return', function(gameList){
+	if(gameList.length > games.length){
+		$.each(gameList, function(index){
+			if(!games[index]) {
+				// new games found. Add those games to the table
+				$('<tr gameid='+gameList[index].id+' onclick="hostListClick(this, '+gameList[index].id+')"><td>'+gameList[index].host+'</td><td>'+gameList[index].description+'</td><td>'+gameList[index].players.length+'</td></tr>').appendTo('#tbl');
+			}
+		});
+	}else{
+		$.each(games, function(index){
+			if(!gameList[index]) {
+				$('#tbl tr[gameid='+games[index].id+']').remove();
+			}
+		});	
 	}
-});
-
-// display a new chat message in the chat list
-socket.on('chat message return', function(msg){
-	$('<p>'+msg+'</p>').appendTo('#chatList').delay(15000).fadeOut(1000, function(){
-		// After 20 seconds fade out. After 1 second of fading out, remove the element (at 0 opacity)
-		$(this).remove();
-	});
-});
-
-$('#mainMenu form:eq(0)').submit(function(event){
-	socket.emit('host game');
-});
-
-socket.on('host game return', function(game){
-	$('<tr onclick="hostListClick(this, '+game.id+')"><td>'+game.host+'</td><td>'+game.description+'</td><td>'+game.players.length+'</td></tr>').appendTo('#tbl');
+	games = gameList;
 });

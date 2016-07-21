@@ -1,0 +1,49 @@
+Host a game
+<form id='StartHostGameForm' style='margin-top: 15px;' method='post' action='/newGame'>
+	<input name='description' type='text' placeholder='Description' minlength="1" maxlength="40" value="My awesome game">
+	<div style="position:relative; width: 100%; left: -13%;">
+		<span style="margin-right: 5%;">number of players:</span> <input name='nrOfPlayers' type='number' min="1" max="5" style='width: 10%;' value=2>
+	</div>
+	<div style='width: 80%; margin-left: 10%;'>
+		<div class="checkBox">
+			<input type="checkbox" value="None" id="checkBox" name="check">
+			<label for="checkBox"></label>
+		</div>
+		<input name='pass' type='password' placeholder='Password' style='float: right;' disabled>
+	</div>
+	<input type='submit' value='open game' style='margin-top: -4px;'>
+</form>
+<form action="/lobby"><input type='submit' value='cancel' style='margin-top: -4px;'></form>
+
+<script>
+	$('#checkBox').change(function() {
+        if(this.checked) {
+    		$('#StartHostGameForm input[type=password]').prop('disabled', false);
+        }else{
+        	$('#StartHostGameForm input[type=password]').prop('disabled', true);
+        	$('#StartHostGameForm input[type=password]').val('');
+        }	
+    });
+    $('#StartHostGameForm input[type=number]').keyup(function(){
+    	this.value = this.value.replace(/[^0-9\.]/g,'');
+    	if(this.value > 5){
+    		this.value = 5;
+    	}
+    	if(this.value == ''){
+    		$('#StartHostGameForm input[type=submit]').prop('disabled', true);
+    	}else{
+    		if($('#StartHostGameForm input[type=text]').val().length != 0){
+    			$('#StartHostGameForm input[type=submit]').prop('disabled', false);
+    		}
+    	}  
+    });
+    $('#StartHostGameForm input[type=text]').keyup(function(){
+    	if(this.value == ''){
+    		$('#StartHostGameForm input[type=submit]').prop('disabled', true);
+    	}else{
+    		if($('#StartHostGameForm input[type=number]').val() != ''){
+    			$('#StartHostGameForm input[type=submit]').prop('disabled', false);
+    		}
+    	}    
+    });
+</script>

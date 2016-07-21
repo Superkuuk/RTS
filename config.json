@@ -5,5 +5,10 @@
 	"user_restrictions": {
 		"username_min_length": 3,
 		"password_min_length": 5
+	},
+	"game_restrictions": {
+		"description_max_length": 40,
+		"min_players": 1,
+		"max_players": 5
 	}
 }
