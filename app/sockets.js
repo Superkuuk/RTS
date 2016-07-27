@@ -5,7 +5,7 @@ module.exports = function(io, games){
 		if(config.debug) console.log('[Sockets] A user connected');
 	
 		socket.on('disconnect', function(){
-			if(config.debug) console.log('[Sockets] User disconnected');	
+			if(config.debug) console.log('[Sockets] User disconnected');
 		});
 		
 		socket.on('request config', function(){
@@ -16,7 +16,12 @@ module.exports = function(io, games){
 		socket.on('request games', function(){
 			socket.emit('request games return', games.getList());
 		});
-	
+		
+		socket.on('join room', function(){
+			var user = socket.request.session.passport.user;
+			socket.join(user.currentGame);
+		});
+		
 	});
 
-}
+};

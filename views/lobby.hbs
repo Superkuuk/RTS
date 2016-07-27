@@ -20,7 +20,7 @@
 			{{#ifCond screen "==" "already hosting"}}
 				You are already hosting a game!
 				<form action="/removegame"><input style="width: 80%;" type='submit' value='remove game'></form>
-				<form action="/join"><input style="width: 80%;margin-top:-10px;" type='submit' value='go to game' disabled></form>
+				<form action="/joinashost"><input style="width: 80%;margin-top:-10px;" type='submit' value='go to game' disabled></form>
 			{{/ifCond}}
 			{{#ifCond screen "==" "normal"}}
 				List of available games

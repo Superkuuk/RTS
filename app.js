@@ -13,7 +13,7 @@ var hbs = require('express-hbs');
 var SQLiteStore = require('connect-sqlite3')(session);
 
 var config = require('./config.json'); // all configurable options for easy tweaking :)   
-var games = require('./games.js');
+var games = require('./app/games.js');
 
 var sessionMiddleware = session({
     name: "LegioI",
@@ -21,6 +21,7 @@ var sessionMiddleware = session({
     store: new SQLiteStore({dir: config.database_path}),
 	resave: true,
 	saveUninitialized: true,
+	rolling: true, // keep cookie maxAge updated while the user is online
 	cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
 });
 
@@ -43,10 +44,10 @@ var io = require("socket.io")(server).use(function(socket, next){
         sessionMiddleware(socket.request, {}, next);
     });
 
-// routes
-require('./app/routes')(app, passport, games);
 // passport setup
 require('./app/passport')(passport);
+// routes
+require('./app/routes')(app, passport, games, io);
 // sockets
 require('./app/sockets')(io, games);
 

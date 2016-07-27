@@ -31,7 +31,7 @@ function hostListClick(obj, id){
 	$(obj).toggleClass('active');
 	if($(obj).hasClass('active')){
 		$('#mainMenu form input[type=hidden]').remove();
-		$('#mainMenu form:eq(1)').append('<input type="hidden" value="'+id+'" readonly>');
+		$('#mainMenu form:eq(1)').append('<input name="selectedGameRoom" type="hidden" value="'+id+'" readonly>');
 		$('#mainMenu form input:eq(1)').prop('disabled', false);
 	}else{
 		$('#mainMenu form input[type=hidden]').remove();
@@ -40,6 +40,7 @@ function hostListClick(obj, id){
 }
 
 socket.on('request games return', function(gameList){
+	// TODO: dynamic updates. When host changes, or when nr of joined players changes, change the row.
 	if(gameList.length > games.length){
 		$.each(gameList, function(index){
 			if(!games[index]) {
