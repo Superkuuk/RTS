@@ -19,7 +19,9 @@ module.exports = function(io, games){
 		
 		socket.on('join room', function(){
 			var user = socket.request.session.passport.user;
+			console.log(user);
 			socket.join(user.currentGame);
+			socket.to(user.currentGame).emit('join room return', games.getById(user.currentGame));
 		});
 		
 	});
