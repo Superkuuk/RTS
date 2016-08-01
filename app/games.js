@@ -15,6 +15,14 @@ exports.update = function(gid, changes) {
 }
 
 exports.add = function(hostname, description, max_players, password) {
+	// check if new host isn't already a host.
+	for(var i = 0; i < gameList.length; i++) {
+		if(gameList[i].host == hostname){
+			if(config.debug) console.log('player is already a host.');
+			return 'error';
+		}
+	}
+		
 	// add a new game to the gameList
 	var d = new Date();
 	var t = d.getTime();
@@ -23,6 +31,16 @@ exports.add = function(hostname, description, max_players, password) {
 	if(config.debug) console.log('==== Game added ====');
 	if(config.debug) console.log(gameList);
 	return (uniqueGameID - 1);
+}
+
+exports.getCurrentGame = function(playerName) {
+	for(var i = 0; i < gameList.length; i++) {
+		if(jQuery.inArray( playerName, gameList[i].players ) != -1){
+			// player is already in a game
+			return gameList[i].id;
+		}
+	}	
+	return false;
 }
 
 exports.addPlayer = function(gid, playerName) {
@@ -60,6 +78,15 @@ exports.getById = function(id){
 	}else{
 		return null;
 	}
+}
+
+exports.getPlayerGame = function(player) {
+	for(var i = 0; i < gameList.length; i++) {
+		for(var a = 0; a < gameList[i].players.length; a++) {
+			if(gameList[i].players[a] == player) return gameList[i].id;
+		}
+	}
+	return -1;
 }
 
 exports.getIdByName = function(hostname){

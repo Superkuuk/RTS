@@ -4,13 +4,13 @@ var app = require('express')();
 var server = require('http').Server(app);
 var session = require('express-session');
 var passport = require('passport');
-var flash = require('connect-flash');
 var fs = require("fs");
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var bcrypt = require('bcryptjs');
 var hbs = require('express-hbs');
 var SQLiteStore = require('connect-sqlite3')(session);
+var io = require("socket.io")(server);
 
 var config = require('./config.json'); // all configurable options for easy tweaking :)   
 var games = require('./app/games.js');
@@ -34,22 +34,25 @@ app.set('views', __dirname + '/views');
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use(cookieParser());
-
-var io = require("socket.io")(server).use(function(socket, next){
+io.use(function(socket, next){
         // Wrap the express middleware
         sessionMiddleware(socket.request, {}, next);
     });
+// var io = require("socket.io")(server).use(function(socket, next){
+//         // Wrap the express middleware
+//         sessionMiddleware(socket.request, {}, next);
+//     });
 
+    
 // passport setup
 require('./app/passport')(passport);
 // routes
-require('./app/routes')(app, passport, games, io);
+require('./app/routes')(app, passport, games);
 // sockets
-require('./app/sockets')(io, games);
+require('./app/sockets')(games, io);
 
 
 // =========================== Database Setup ===========================
@@ -96,6 +99,14 @@ function makeDatabaseFile() {
 			db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", ["Dinky", bcrypt.hashSync("Toy", 8)], function(err){
 				if (err) throw err;
 				if(config.debug) console.log('[Startup] Dinky created'); // test account
+			});
+			db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", ["Superkuuk", bcrypt.hashSync("Toy", 8)], function(err){
+				if (err) throw err;
+				if(config.debug) console.log('[Startup] Superkuuk created'); // test account
+			});
+			db.run("INSERT INTO accounts (nickname, password) VALUES (?,?)", ["Poppy", bcrypt.hashSync("Toy", 8)], function(err){
+				if (err) throw err;
+				if(config.debug) console.log('[Startup] Poppy created'); // test account
 			});
 		});
 		db.close();

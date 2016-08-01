@@ -13,9 +13,14 @@ Host a game
 	</div>
 	<input type='submit' value='open game' style='margin-top: -4px;'>
 </form>
-<form action="/lobby"><input type='submit' value='cancel' style='margin-top: -4px;'></form>
+<input type='submit' value='cancel' style='margin-top: -4px;' onclick='cancel()'>
 
 <script>
+	function cancel(){
+		var html = 	'List of available games <table id="tbl"></table>';		
+		$( "#hostList" ).html( html );
+	}
+	
 	$('#checkBox').change(function() {
         if(this.checked) {
     		$('#StartHostGameForm input[type=password]').prop('disabled', false);
@@ -24,19 +29,17 @@ Host a game
         	$('#StartHostGameForm input[type=password]').val('');
         }	
     });
-    $('#StartHostGameForm input[type=number]').keyup(function(){
-    	this.value = this.value.replace(/[^0-9\.]/g,'');
-    	if(this.value > 5){
-    		this.value = 5;
-    	}
-    	if(this.value == ''){
-    		$('#StartHostGameForm input[type=submit]').prop('disabled', true);
+    
+    
+    $('#StartHostGameForm input[type=number]').keydown(function(event){
+    	if(!(event.which < 54 && event.which > 48)){
+    		event.preventDefault();
     	}else{
-    		if($('#StartHostGameForm input[type=text]').val().length != 0){
-    			$('#StartHostGameForm input[type=submit]').prop('disabled', false);
-    		}
-    	}  
+    		this.value = '';
+    	}
     });
+    
+    
     $('#StartHostGameForm input[type=text]').keyup(function(){
     	if(this.value == ''){
     		$('#StartHostGameForm input[type=submit]').prop('disabled', true);

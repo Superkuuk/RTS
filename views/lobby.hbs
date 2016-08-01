@@ -5,41 +5,32 @@
 		
 		<link href='https://fonts.googleapis.com/css?family=Quattrocento:400,700|Architects+Daughter' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="client/global/main.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="client/lobby/lobby.js"></script>
 	</head>
 
 	<body>
 		<div id="bg"></div>		
 		<div id="arrow"></div>
 		<div id='hostList'>
-			{{#ifCond screen "==" "host"}}
-				{{> startHost}}
-			{{/ifCond}}
-			{{#ifCond screen "==" "already hosting"}}
-				You are already hosting a game!
-				<form action="/removegame"><input style="width: 80%;" type='submit' value='remove game'></form>
-				<form action="/joinashost"><input style="width: 80%;margin-top:-10px;" type='submit' value='go to game' disabled></form>
-			{{/ifCond}}
-			{{#ifCond screen "==" "normal"}}
 				List of available games
 				<table id="tbl"></table>			
-			{{/ifCond}}
 		</div>
 		
 		<div id='mainMenu'>
 			<h1>Legio I</h1>
 			<hr>
-				<p>Lobby</p>
+				<p>Welcome {{username}}!</p>
 				<div class='menuButtons'>
-					<form action="/host"><input type='submit' value='host'></form>
+					<input type='submit' value='host' onclick='newHost()'>
 					<form action="/join" method="post"><input type='submit' value='join' disabled></form>
-					<form action="/"><input type='submit' value='back'></form>
+					<form action="/profile"><input type='submit' value='profile' disabled></form>
+					<form action="/logout"><input type='submit' value='logout'></form>
 				</div>
 		</div>
 		<div id="information">
 			{{> information}}
 		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="client/lobby/lobby.js"></script>
 	</body>
 </html>

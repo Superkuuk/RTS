@@ -16,22 +16,12 @@
 		<div id='mainMenu'>
 			<h1>Legio I</h1>
 			<hr>
-			{{#ifCond username '!=' false}}
-				<p>Welcome {{username}}!</p>
-				<div class='menuButtons'>
-					<form action="/lobby"><input type='submit' value='start game'></form>
-					<form action="/profile"><input type='submit' value='profile' disabled></form>
-					<form action="/logout"><input type='submit' value='log out'></form>
-				</div>
-			{{else}}
-				<form id='loginForm' action="/login" method="post">		
-					<p>Login:</p>
-					<input type='text' placeholder='name' name='username'>
-					<input type='password' placeholder='password' name='password'>
-					<input type='submit' value='login'>		
-				</form>
-				<form id='registerButton' action="/register" method="get"><input type='submit' value='new player'></form>
-			{{/ifCond}}
+			<form id='loginForm' action="/login" method="post">		
+				<p>Login:</p>
+				<input type='text' placeholder='name' name='username'>
+				<input type='password' placeholder='password' name='password'>
+				<input type='submit' value='login'>		
+			</form>
 		</div>
 		
 		<div id="information">

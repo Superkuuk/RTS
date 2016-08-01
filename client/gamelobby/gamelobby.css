@@ -13,6 +13,11 @@ span {
 	font-size: 20px;
 }
 
+th {
+	text-align: left;
+	border-bottom: 1px solid #775B27;
+}
+
 input:focus {
 	outline: none;
 }
@@ -64,7 +69,7 @@ input[type=submit]:hover {
 	position: absolute;
 	box-sizing: border-box;
 	margin: 15px;
-	width: 60%;
+	width: calc(60% - 30px);
 }
 
 #chatBox {
